@@ -97,7 +97,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     const sections = await Promise.all(
         visibleSubcategories.map(async (subcategory) => {
             const slug = subcategorySlugFromHref(subcategory.href);
-            const rawProducts = await getAllCategoryProducts(category.id, 100, locale, slug);
+            const rawProducts = await getAllCategoryProducts(slug, 100, locale);
             const sectionProducts = mapApiProductsToProducts(rawProducts).map(withOffer);
 
             return {
@@ -146,3 +146,4 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </>
     );
 }
+
