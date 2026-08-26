@@ -19,7 +19,16 @@ type CategoryPageProps = {
 
 async function getCategoryBySlug(id: string): Promise<Category | undefined> {
     const categories = await fetchCategories();
-    return categories.find((category) => category.id === id);
+    if (categories.length === 0) {
+        console.error('[getCategoryBySlug] fetchCategories returned empty — possible API failure', { id, apiBaseUrl: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api' });
+        // No silenciar: si la API falló, propagar error observable en lugar de 404
+        throw new Error('Failed to fetch categories');
+    }
+    const found = categories.find((category) => category.id === id);
+    if (!found) {
+        console.error('[getCategoryBySlug] category not found', { id, availableIds: categories.map((c) => c.id) });
+    }
+    return found;
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
@@ -65,8 +74,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-    const { id, subcategory } = await params;
-    const category = await getCategoryBySlug(id);
+    const { id, subcategory } = await params;const category = await getCategoryBySlug(id);
 
     if (!category) {
         notFound();

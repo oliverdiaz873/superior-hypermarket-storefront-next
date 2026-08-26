@@ -3,7 +3,6 @@ import { Link } from '@/i18n/routing'
 import Image from 'next/image'
 import { memo, ReactNode } from 'react'
 import { Product } from '@/types/product'
-import { getAssetUrl } from '@/lib/assetUtils'
 import { cleanPrice } from '@/lib/priceUtils'
 import { useProductTranslation } from '../hooks/useProductTranslation'
 import './ProductCard.css'
@@ -30,7 +29,7 @@ const ProductCard = ({ product, isOffer, oldPrice, badge, action }: ProductCardP
 
             <div className="producto-img-container">
                 <Image 
-                    src={getAssetUrl(product.imagen)} 
+                    src={product.imagen} 
                     alt={name} 
                     width={300}
                     height={300}
