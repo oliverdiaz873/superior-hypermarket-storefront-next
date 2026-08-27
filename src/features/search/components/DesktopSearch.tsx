@@ -2,7 +2,6 @@ import { Link } from '@/i18n/routing'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import type { HeaderSearchProduct } from '../hooks/useHeaderSearch'
-import { getAssetUrl } from '@/lib/assetUtils'
 import { SearchIcon, CloseIcon, CartIcon } from '@/ui/Icons'
 import './DesktopSearch.css'
 
@@ -99,7 +98,7 @@ const DesktopSearch = ({
                                 className="desktop-search__result"
                             >
                                 <Image
-                                    src={getAssetUrl(product.imagen)}
+                                    src={product.imagen}
                                     alt={product.name}
                                     width={40}
                                     height={40}

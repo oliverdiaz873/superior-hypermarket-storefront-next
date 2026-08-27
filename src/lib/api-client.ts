@@ -133,10 +133,14 @@ export const STORAGE_PUBLIC_URL =
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Resuelve la URL pública de una imagen de producto.
- * - URL absoluta (http/https/data:) → se usa tal cual.
- * - Key relativa legacy de la seed (ej. `products/bebidas/coca-cola.avif` sin
- *   imageKey) → `${STORAGE_PUBLIC_URL}/uploads/<key>`.
+ * Resuelve la URL pública de una imagen de producto (contrato único normalizado).
+ * - La API devuelve siempre una URL pública (`/uploads/...?v=` en dev,
+ *   `https://cdn/...` en prod) o `null` — ver
+ *   `superior-hypermarket-api/src/modules/products/presenters/product.presenter.ts`.
+ * - URL absoluta (http/https/data:) y `/uploads/...` se usan tal cual
+ *   (`/uploads/...` se hace absoluta con `STORAGE_PUBLIC_URL` para `next/image`).
+ * - No se hace conversión legacy `products/... -> /uploads/...` en el cliente;
+ *   esa compatibilidad vive solo en la API.
  * - `?v=` se conserva si viene en la respuesta; jamás se versiona en el cliente.
  */
 export function resolveApiImageUrl(image?: string | null): string | null {
@@ -145,8 +149,7 @@ export function resolveApiImageUrl(image?: string | null): string | null {
     return image
   }
   if (image.startsWith('/uploads/')) return `${STORAGE_PUBLIC_URL}${image}`
-  const raw = image.startsWith('/') ? image.slice(1) : image
-  return `${STORAGE_PUBLIC_URL}/uploads/${raw}`
+  return image
 }
 
 /**
@@ -284,6 +287,7 @@ async function apiRequest<T>(path: string, params?: object): Promise<T> {
 
   const res = await fetch(url, {
     headers: { Accept: 'application/json' },
+    cache: 'no-store',
   })
 
 
@@ -397,12 +401,14 @@ export async function sendContactMessage(payload: ApiContactPayload): Promise<Ap
  * F5.3: obtiene categorías de la API y las mapea al modelo del storefront.
  * Nunca lanza: si el backend no responde devuelve una lista vacía para que la
  * UI degrade a "sin navegación de categorías" en vez de romper el SSR.
+ * El error se loggea para observabilidad SSR (no se silencia).
  */
 export async function fetchCategories(): Promise<Category[]> {
   try {
     const { data } = await getCategories()
     return mapApiCategoriesToCategories(data)
-  } catch {
+  } catch (error) {
+    console.error('[fetchCategories] failed to fetch categories from', `${API_BASE_URL}/categories`, error)
     return []
   }
 }

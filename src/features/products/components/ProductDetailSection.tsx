@@ -3,7 +3,6 @@
 import { ReactNode, useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { Product } from '@/types/product'
-import { getAssetUrl } from '@/lib/assetUtils'
 import { ProductPageData } from '@/services/catalog/productPageData'
 import { useProductTranslation } from '../hooks/useProductTranslation'
 import './ProductDetailSection.css'
@@ -84,7 +83,7 @@ const ProductDetailSection = ({ product, pageData, action }: ProductDetailSectio
                 {/* Imagen con modal lightbox */}
                 <figure className="imagen-producto">
                     <Image
-                        src={getAssetUrl(product.imagen)}
+                        src={product.imagen}
                         alt={name}
                         width={600}
                         height={600}
@@ -119,7 +118,7 @@ const ProductDetailSection = ({ product, pageData, action }: ProductDetailSectio
                     </button>
                     {/* El div completo sirve de área de cierre */}
                     <Image
-                        src={getAssetUrl(product.imagen)}
+                        src={product.imagen}
                         alt={labels.expandedImage}
                         width={1200}
                         height={1200}

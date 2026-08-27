@@ -5,6 +5,20 @@ import { IMAGE_REMOTE_PATTERNS } from './src/lib/image-remote-patterns.ts'
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/category/carnes-pescados-mariscos',
+        destination: '/es/category/alimentos/carnes-pescados-mariscos',
+        permanent: true,
+      },
+      {
+        source: '/:locale/category/carnes-pescados-mariscos',
+        destination: '/:locale/category/alimentos/carnes-pescados-mariscos',
+        permanent: true,
+      },
+    ]
+  },
   async rewrites() {
     return [{ source: '/uploads/:path*', destination: 'http://localhost:3000/uploads/:path*' }]
   },

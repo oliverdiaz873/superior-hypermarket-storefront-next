@@ -2,7 +2,6 @@ import { Link } from '@/i18n/routing'
 import Image from 'next/image'
 import { memo } from 'react'
 import { Product } from '@/types/product'
-import { getAssetUrl } from '@/lib/assetUtils'
 import { cleanPrice } from '@/lib/priceUtils'
 import QuantityControls from './QuantityControls'
 import { OfferBadge } from '../../offers/components'
@@ -74,7 +73,7 @@ const CartItem = ({
                         </div>
                     )}
                     <Image
-                        src={getAssetUrl(img)}
+                        src={img}
                         alt={name}
                         width={100}
                         height={100}

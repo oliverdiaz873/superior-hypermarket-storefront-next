@@ -6,7 +6,7 @@
 export const getAssetUrl = (path: string) => {
     if (!path) return '';
 
-    if (path.startsWith('http') || path.startsWith('data:')) {
+    if (path.startsWith('http') || path.startsWith('data:') || path.startsWith('/uploads/')) {
         return path;
     }
 

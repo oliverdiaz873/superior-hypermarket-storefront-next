@@ -40,9 +40,9 @@ describe('toUiCartItem', () => {
         expect(item.isOffer).toBe(false)
     })
 
-    it('resuelve la key relativa del backend a la URL pública de storage', () => {
+    it('retorna la URL pública tal cual (API ya normaliza a /uploads/)', () => {
         const item = toUiCartItem({ ...serverItem, image: 'products/bebidas/coca-cola.avif' })
-        expect(item.img).toBe('http://localhost:3000/uploads/products/bebidas/coca-cola.avif')
+        expect(item.img).toBe('products/bebidas/coca-cola.avif')
     })
 
     it('default de unitLabel a "unidad" sin unidad explícita', () => {

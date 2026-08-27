@@ -2,7 +2,6 @@ import { Link } from '@/i18n/routing'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import type { HeaderSearchProduct } from '../hooks/useHeaderSearch'
-import { getAssetUrl } from '@/lib/assetUtils'
 import { SearchIcon, CloseIcon, CartIcon } from '@/ui/Icons'
 import './TabletSearch.css'
 
@@ -106,7 +105,7 @@ const TabletSearch = ({
                                 className="tablet-search__result"
                             >
                                 <Image
-                                    src={getAssetUrl(product.imagen)}
+                                    src={product.imagen}
                                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                     alt={tProducts.has(`${product.id}.name` as any) ? tProducts(`${product.id}.name` as any) : product.name}
                                     width={40}
