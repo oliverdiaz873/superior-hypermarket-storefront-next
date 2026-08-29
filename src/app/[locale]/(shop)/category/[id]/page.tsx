@@ -103,25 +103,37 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             : product;
     };
 
-    // F5.3: obtener todos los productos por subcategoría respetando la paginación del backend
+    // F5.3: obtener productos — Fase 3: 1 llamada agregada para categoría padre
+    // Antes: 6× getAllCategoryProducts(subSlug) → 6 requests
+    // Después: 1× getAllCategoryProducts(category.id) → 1 request + agrupación local
     const visibleSubcategories = subcategory
         ? category.subcategories.filter((item) => subcategorySlugFromHref(item.href) === subcategory)
         : category.subcategories;
     if (subcategory && visibleSubcategories.length === 0) notFound();
 
-    const sections = await Promise.all(
-        visibleSubcategories.map(async (subcategory) => {
-            const slug = subcategorySlugFromHref(subcategory.href);
-            const rawProducts = await getAllCategoryProducts(slug, 100, locale);
-            const sectionProducts = mapApiProductsToProducts(rawProducts).map(withOffer);
+    let allRawProducts: Awaited<ReturnType<typeof getAllCategoryProducts>> = [];
+    if (visibleSubcategories.length > 0) {
+        if (visibleSubcategories.length === 1 && subcategory) {
+            const singleSlug = subcategorySlugFromHref(visibleSubcategories[0].href);
+            allRawProducts = await getAllCategoryProducts(singleSlug, 100, locale);
+        } else {
+            allRawProducts = await getAllCategoryProducts(category.id, 100, locale);
+        }
+    }
 
-            return {
-                slug,
-                title: getSubcategoryName(subcategory, t),
-                products: sectionProducts,
-            };
-        })
-    );
+    const sections = visibleSubcategories.map((sub) => {
+        const slug = subcategorySlugFromHref(sub.href);
+        const rawForSection =
+            visibleSubcategories.length === 1 && subcategory
+                ? allRawProducts
+                : allRawProducts.filter((p) => p.subcategory?.slug === slug || p.subcategoryId === slug);
+        const sectionProducts = mapApiProductsToProducts(rawForSection).map(withOffer);
+        return {
+            slug,
+            title: getSubcategoryName(sub, t),
+            products: sectionProducts,
+        };
+    });
 
     const filteredSections = sections.filter((section) => section.products.length > 0);
 
