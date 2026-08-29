@@ -167,10 +167,7 @@ export function mapApiProductToProduct(api: ApiProduct): Product {
   const unit = api.unit ?? ''
   const quantity = api.unitQuantity
 
-  const hasUnitBlock = Boolean(unit || (quantity != null && quantity > 1))
-  const precioTexto = hasUnitBlock
-    ? `Precio: $${api.price.toLocaleString('en-US')} / ${quantity ?? 1} ${unit}`.trim()
-    : `Precio: $${api.price.toLocaleString('en-US')}`
+  const precioTexto = `Precio: $${api.price.toLocaleString('en-US')}`
 
   return {
     id: api.id,
@@ -221,10 +218,7 @@ export function mapApiOfferToOfferProduct(api: ApiOffer): OfferProduct {
   const unit = api.unit ?? ''
   const quantity = api.unitQuantity
 
-  const hasUnitBlock = Boolean(unit || (quantity != null && quantity > 1))
-  const precioTexto = hasUnitBlock
-    ? `Precio: $${api.discountPrice.toLocaleString('en-US')} / ${quantity ?? 1} ${unit}`.trim()
-    : `Precio: $${api.discountPrice.toLocaleString('en-US')}`
+  const precioTexto = `Precio: $${api.discountPrice.toLocaleString('en-US')}`
 
   return {
     id: api.id,
@@ -275,7 +269,7 @@ export function mapApiCategoriesToCategories(apiCategories: ApiCategory[]): Cate
 // Client HTTP (fetch nativo; sirve tanto en Server Components como en el cliente)
 // ─────────────────────────────────────────────────────────────────────────────
 
-async function apiRequest<T>(path: string, params?: object): Promise<T> {
+export async function apiRequest<T>(path: string, params?: object): Promise<T> {
   const url = new URL(`${API_BASE_URL}${path}`)
   if (params) {
     for (const [key, value] of Object.entries(params)) {
@@ -290,9 +284,15 @@ async function apiRequest<T>(path: string, params?: object): Promise<T> {
     cache: 'no-store',
   })
 
-
   if (!res.ok) {
-    throw new Error(`API ${res.status}: ${res.url}`)
+    let message = ''
+    try {
+      const body = (await res.json()) as { message?: string } | null
+      message = body?.message ?? ''
+    } catch {
+      /* cuerpo no-JSON: se usa el mensaje por defecto */
+    }
+    throw new ApiRequestError(res.status, message)
   }
 
   return (await res.json()) as T

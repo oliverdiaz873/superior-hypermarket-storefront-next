@@ -51,9 +51,11 @@ const ProductCard = ({ product, isOffer, oldPrice, badge, action }: ProductCardP
                         <p className="producto-price">{cleanPrice(product.precioTexto)}</p>
                     )}
                 </div>
-                <p className="producto-unit-format">
-                    ${product.precio.toLocaleString()} / {labels.unit}
-                </p>
+                {labels.unit && (
+                    <p className="producto-unit-format">
+                        ${product.precio.toLocaleString()} / {labels.unit}
+                    </p>
+                )}
             </div>
 
             <h3 className="producto-title">{name}</h3>

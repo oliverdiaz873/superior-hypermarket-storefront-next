@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import CategoryPageClient from '../../_components/CategoryPageClient';
 import { fetchCategories, getAllCategoryProducts, mapApiProductsToProducts, fetchOffers, type ApiLang } from '@/lib/api-client';
 import type { Category } from '@/types/category';
+import type { Product } from '@/types/product';
 import { getCategoryName, getSubcategoryName } from '@/lib';
 
 const subcategorySlugFromHref = (href: string): string => href.split('/').filter(Boolean).pop() ?? '';
@@ -89,10 +90,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     const locale = (await getLocale()) as ApiLang;
     const offers = await fetchOffers(locale);
     const offerMap = new Map(offers.map((offer) => [offer.id, offer]));
-    const withOffer = <T extends { id: string }>(product: T) => {
+    const withOffer = (product: Product) => {
         const offer = offerMap.get(product.id);
         return offer
-            ? { ...product, oldPrice: offer.oldPrice, discountPercentage: offer.discountPercentage }
+            ? {
+                  ...product,
+                  precio: offer.precio,
+                  precioTexto: offer.precioTexto,
+                  oldPrice: offer.oldPrice,
+                  discountPercentage: offer.discountPercentage,
+              }
             : product;
     };
 

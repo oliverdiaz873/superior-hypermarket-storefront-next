@@ -22,8 +22,6 @@
  */
 import { createContext, useCallback, useEffect, useMemo, useReducer, useRef, type ReactNode } from 'react'
 import { useSession } from '@/features/auth/SessionContext'
-import { unitLabel } from '@/lib/priceUtils'
-import type { Product } from '@/types/product'
 import { localItemsToMergePayload, type CartItemInput } from './cart-mapper'
 import { cartReducer, initialCartState } from './cart-reducer'
 import { createSerialQueue } from './mutation-queue'
@@ -56,7 +54,9 @@ const STORAGE_KEY = 'carrito'
 function normalizeStored(items: CartItem[]): CartItem[] {
     return items.map((item) => ({
         ...item,
-        unitLabel: item.unitLabel || unitLabel({ unidad: item.unidad, precioTexto: item.precioTexto } as Product),
+        // unitLabel ya no es necesario para presentación (usa formatUnitLabel en componentes)
+        // aseguramos que unidad y quantity existan para compatibilidad
+        unidad: item.unidad || (item.precioTexto ? item.precioTexto.split('/').pop()?.trim() : undefined),
     }))
 }
 

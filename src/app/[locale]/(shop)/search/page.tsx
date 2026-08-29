@@ -53,7 +53,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             results = mapApiProductsToProducts(data).map((product) => {
                 const offer = offerMap.get(product.id);
                 return offer
-                    ? { ...product, oldPrice: offer.oldPrice, discountPercentage: offer.discountPercentage }
+                    ? {
+                          ...product,
+                          precio: offer.precio,
+                          precioTexto: offer.precioTexto,
+                          oldPrice: offer.oldPrice,
+                          discountPercentage: offer.discountPercentage,
+                      }
                     : product;
             });
         } catch {
