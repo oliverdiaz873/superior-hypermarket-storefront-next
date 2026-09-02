@@ -4,7 +4,7 @@
 
 This project is a Next.js `16.2.6` App Router storefront for a localized hypermarket experience. It uses React `19.2.4`, TypeScript, `next-intl`, Tailwind CSS through PostCSS, component-level CSS files, and local TypeScript catalog data.
 
-The application does not currently use a backend API, database, route handlers, or remote product service. Catalog, category, offer, and product-detail data are imported from local modules under `src/services/catalog/`.
+The application uses a centralized REST API (`superior-hypermarket-api` on `http://localhost:3000/api`) for catalog, cart, auth, orders and contact. Help Center content remains local in `src/features/help/help.content.ts` and `messages/{locale}.json`. See `docs/features/help.md` for Help Center details.
 
 ## Route Model
 
@@ -18,6 +18,9 @@ Routes are defined under `src/app/[locale]/`. The `[locale]` segment is handled 
 | Cart | `src/app/[locale]/(shop)/cart/page.tsx` |
 | Category detail | `src/app/[locale]/(shop)/category/[id]/page.tsx` |
 | Contact | `src/app/[locale]/(shop)/contact/page.tsx` |
+| Help Center | `src/app/[locale]/(shop)/help/page.tsx` |
+| Help Category | `src/app/[locale]/(shop)/help/[category]/page.tsx` |
+| Help Topic | `src/app/[locale]/(shop)/help/[category]/[topic]/page.tsx` |
 | Privacy policy | `src/app/[locale]/(shop)/legal/privacy/page.tsx` |
 | Terms | `src/app/[locale]/(shop)/legal/terms/page.tsx` |
 | Offers | `src/app/[locale]/(shop)/offers/page.tsx` |
@@ -61,11 +64,12 @@ The project follows the App Router default of Server Components unless a file is
 
 Server-side responsibilities include:
 
-- Route metadata through `generateMetadata`.
+- Route metadata through `generateMetadata` (including Help Center canonical/alternates per locale).
 - Locale message loading in the root locale layout.
-- Local catalog lookup in product and category route pages.
-- Sitemap and robots metadata generation.
+- Catalog lookup via API (`src/lib/api-client.ts`) with Next.js Data Cache in product and category route pages.
+- Sitemap and robots metadata generation (`src/app/sitemap.ts` generates Help routes from `HELP_CATEGORIES`).
 - JSON-LD generation on home, product, and category pages.
+- Help Center category/topic validation via `isValidHelpCategory` / `isValidHelpTopic`.
 
 Client-side responsibilities include:
 
@@ -120,12 +124,12 @@ The project uses local React state and React Context. It does not use Redux, Zus
 
 ## API Communication
 
-No API communication is currently implemented.
+The application communicates with `superior-hypermarket-api` via `src/lib/api-client.ts` and feature-specific server clients (`auth`, `cart`, `orders`, `addresses`, `contact`).
 
-- There are no App Router route handlers.
-- There are no remote `fetch` calls in application source.
-- Contact form submission is simulated unless a caller provides an `onSubmit` callback.
-- Checkout/payment is not implemented.
+- App Router route handlers: `src/app/api/session` and `src/app/api/cart` (session/cart tunnels).
+- Remote `fetch` calls via `api-client.ts` (`/products`, `/categories`, `/offers`, `/search`, `/contact`) and server clients (`/auth/me`, `/cart`, `/orders`, `/addresses`).
+- Contact form submits via `POST /api/contact` with prefix `[category/topic][pedido:orderId]` for Help context; see `docs/features/contact.md` and `docs/features/help.md`.
+- Checkout uses idempotent `POST /orders` with `addressId` and `idempotencyKey`.
 
 ## Caching
 

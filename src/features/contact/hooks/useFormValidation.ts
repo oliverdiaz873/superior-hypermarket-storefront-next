@@ -27,6 +27,7 @@ interface UseFormValidationReturn {
 
 interface UseFormValidationOptions {
     resetOnSuccess?: boolean
+    initialData?: Partial<FormData>
 }
 
 // Validación detallada (Usando traducciones i18n para proveer los mensajes de error)
@@ -70,10 +71,10 @@ export const useFormValidation = (
 ): UseFormValidationReturn => {
     const t = useTranslations('contact');
     const [formData, setFormData] = useState<FormData>({
-        nombre: '',
-        email: '',
-        telefono: '',
-        mensaje: ''
+        nombre: options.initialData?.nombre ?? '',
+        email: options.initialData?.email ?? '',
+        telefono: options.initialData?.telefono ?? '',
+        mensaje: options.initialData?.mensaje ?? ''
     })
     
     const [errors, setErrors] = useState<FormErrors>({})

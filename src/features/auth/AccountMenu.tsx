@@ -22,6 +22,7 @@ interface AccountMenuProps {
  */
 export default function AccountMenu({ variant = 'desktop', onNavigate }: AccountMenuProps) {
   const t = useTranslations('auth')
+  const tFooter = useTranslations('footer')
   const router = useRouter()
   const { status, user, refresh } = useSession()
   const [pending, startTransition] = useTransition()
@@ -80,8 +81,32 @@ export default function AccountMenu({ variant = 'desktop', onNavigate }: Account
     )
   }
 
+  if (variant === 'mobile') {
+    return (
+      <div className="flex flex-col gap-1">
+        <Link href="/account" className={linkClass} onClick={onNavigate}>
+          {t('menu.my_account')}
+        </Link>
+        <Link href="/orders" className={linkClass} onClick={onNavigate}>
+          {tFooter('links.orders')}
+        </Link>
+        <Link href="/addresses" className={linkClass} onClick={onNavigate}>
+          {tFooter('links.addresses')}
+        </Link>
+        <button
+          type="button"
+          onClick={handleLogout}
+          disabled={pending}
+          className={`${linkClass} bg-transparent border-none text-left cursor-pointer disabled:opacity-50`}
+        >
+          {t('menu.logout')}
+        </button>
+      </div>
+    )
+  }
+
   return (
-    <div className={`flex items-center gap-1 ${variant === 'mobile' ? 'flex-wrap' : ''}`}>
+    <div className="flex items-center gap-1">
       <Link
         href="/account"
         onClick={onNavigate}
@@ -91,9 +116,6 @@ export default function AccountMenu({ variant = 'desktop', onNavigate }: Account
         <span className="w-9 h-9 rounded-full bg-orange-500 text-white flex items-center justify-center font-semibold text-sm shrink-0">
           {initials}
         </span>
-        {variant === 'mobile' && (
-          <span className="text-sm">{t('menu.my_account')}</span>
-        )}
       </Link>
       <button
         type="button"
