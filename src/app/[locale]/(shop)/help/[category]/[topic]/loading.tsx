@@ -1,6 +1,6 @@
 export default function HelpTopicLoading() {
   return (
-    <div className="help-container" style={{ minHeight: "320px" }}>
+    <div className="help-container" style={{ minHeight: '320px' }}>
       <div className="animate-pulse">
         <div className="h-8 bg-white/10 rounded w-2/3 mx-auto mb-4" />
         <div className="h-4 bg-white/10 rounded w-full mb-6" />
@@ -13,5 +13,5 @@ export default function HelpTopicLoading() {
         <div className="h-16 bg-white/10 rounded-xl mt-6" />
       </div>
     </div>
-  );
+  )
 }

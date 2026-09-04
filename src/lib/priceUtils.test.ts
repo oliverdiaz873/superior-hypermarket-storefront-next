@@ -20,11 +20,15 @@ describe('priceUtils · formatUnitLabel', () => {
     })
 
     it('unidad + 2 → "2 unidades"', () => {
-      expect(formatUnitLabel(makeProduct({ unidad: 'unidad', quantity: 2 }), 'es')).toBe('2 unidades')
+      expect(formatUnitLabel(makeProduct({ unidad: 'unidad', quantity: 2 }), 'es')).toBe(
+        '2 unidades',
+      )
     })
 
     it('unidad + 6 → "6 unidades"', () => {
-      expect(formatUnitLabel(makeProduct({ unidad: 'unidad', quantity: 6 }), 'es')).toBe('6 unidades')
+      expect(formatUnitLabel(makeProduct({ unidad: 'unidad', quantity: 6 }), 'es')).toBe(
+        '6 unidades',
+      )
     })
 
     it('unit (en) + 1 → "unit"', () => {
@@ -48,7 +52,9 @@ describe('priceUtils · formatUnitLabel', () => {
     })
 
     it('paquete + 2 → "2 paquetes"', () => {
-      expect(formatUnitLabel(makeProduct({ unidad: 'paquete', quantity: 2 }), 'es')).toBe('2 paquetes')
+      expect(formatUnitLabel(makeProduct({ unidad: 'paquete', quantity: 2 }), 'es')).toBe(
+        '2 paquetes',
+      )
     })
 
     it('caja + 2 → "2 cajas"', () => {
@@ -56,7 +62,9 @@ describe('priceUtils · formatUnitLabel', () => {
     })
 
     it('botella + 2 → "2 botellas"', () => {
-      expect(formatUnitLabel(makeProduct({ unidad: 'botella', quantity: 2 }), 'es')).toBe('2 botellas')
+      expect(formatUnitLabel(makeProduct({ unidad: 'botella', quantity: 2 }), 'es')).toBe(
+        '2 botellas',
+      )
     })
 
     it('lata + 2 → "2 latas"', () => {
@@ -112,7 +120,9 @@ describe('priceUtils · formatUnitLabel', () => {
     })
 
     it('quantity null → ""', () => {
-      expect(formatUnitLabel(makeProduct({ unidad: 'kg', quantity: null as number | null }), 'es')).toBe('')
+      expect(
+        formatUnitLabel(makeProduct({ unidad: 'kg', quantity: null as number | null }), 'es'),
+      ).toBe('')
     })
   })
 })
@@ -150,6 +160,8 @@ describe('priceUtils · formatProductPrice', () => {
 
   it('usa translatedUnit cuando se proporciona', () => {
     const product = makeProduct({ unidad: 'unidad', quantity: 2, precio: 100 })
-    expect(formatProductPrice(product, { translatedUnit: '2 uds.', locale: 'es' })).toBe('Precio: $100 / 2 uds.')
+    expect(formatProductPrice(product, { translatedUnit: '2 uds.', locale: 'es' })).toBe(
+      'Precio: $100 / 2 uds.',
+    )
   })
 })

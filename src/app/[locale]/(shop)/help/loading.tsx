@@ -1,6 +1,6 @@
 export default function HelpLoading() {
   return (
-    <div className="help-container" style={{ minHeight: "320px" }}>
+    <div className="help-container" style={{ minHeight: '320px' }}>
       <div className="animate-pulse">
         <div className="h-8 bg-white/10 rounded w-1/3 mx-auto mb-4" />
         <div className="h-4 bg-white/10 rounded w-2/3 mx-auto mb-8" />
@@ -11,5 +11,5 @@ export default function HelpLoading() {
         </div>
       </div>
     </div>
-  );
+  )
 }
