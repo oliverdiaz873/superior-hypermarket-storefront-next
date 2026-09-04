@@ -144,12 +144,6 @@ const MobileNav = ({ isOpen, onClose, showLanguage, categories }: MobileNavProps
                         </Link>
                     </li>
 
-                    <li className="px-5 py-2.5 border-b border-white/10">
-                        <Link href="/contact" className="block py-1 hover:text-orange-500 transition-colors duration-200" onClick={handleLinkClick}>
-                            {t('nav.contact')}
-                        </Link>
-                    </li>
-
                     {showLanguage !== false && (
                     <li className="px-5 py-2.5 border-b border-white/10">
                         <AccountMenu variant="mobile" onNavigate={handleLinkClick} />

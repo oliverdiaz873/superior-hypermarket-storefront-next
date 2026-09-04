@@ -22,7 +22,7 @@ export { getAssetUrl } from './assetUtils'
 export { normalizarTexto } from './searchUtils'
 
 // Precios: Formateo y extracción de precios y unidades
-export { cleanPrice, unitLabel } from './priceUtils'
+export { cleanPrice, formatProductPrice, formatUnitLabel } from './priceUtils'
 
 // Categorías: Nombres traducidos de categorías y subcategorías
 export { getCategoryName, getSubcategoryName } from './categoryUtils'

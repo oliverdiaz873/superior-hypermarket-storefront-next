@@ -50,6 +50,14 @@ export default function AccountPageClient({ user }: { user: AuthUser }) {
         {t('account.my_orders')}
       </Link>
 
+      <Link
+        href="/help"
+        className="mt-4 block w-full rounded-lg border border-orange-500 bg-white text-orange-600 dark:bg-transparent dark:text-orange-300 font-semibold py-3 text-sm text-center transition-colors duration-200 hover:bg-orange-50 dark:hover:bg-white/10"
+      >
+        {t('account.help_cta')}
+      </Link>
+      <p className="mt-2 text-xs text-center opacity-60 dark:text-white/60">{t('account.help_description')}</p>
+
       <button
         type="button"
         onClick={handleLogout}

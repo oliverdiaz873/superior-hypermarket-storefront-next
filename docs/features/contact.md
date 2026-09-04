@@ -44,14 +44,15 @@ Validation runs on input changes and on submit.
 - Phone is optional, but if provided it must contain 8 to 15 digits after removing spaces, dashes, and parentheses.
 - Message is required and must be between 10 and 500 characters.
 
+## Contact Context (Help Center)
+
+When accessed via `GET /contact?category={category}&topic={topic}&orderId={orderId}`, `contact/page.tsx` validates `isValidHelpTopic` and pre-fills help context. `ContactPageClient` shows chips (`category › topic` + `Order: #orderNumber`) and `ContactForm` handles `orderId` as technical ID (displays `orderNumber`), pre-fills `name/email` for authenticated users, and shows an order selector (authenticated, all orders) or generic input (anonymous). Message is sent via `POST /api/contact` (`src/lib/api-client.ts`) with prefix `[category/topic][pedido:orderId]` + user message; see `docs/features/help.md`.
+
 ## Submission Behavior
 
-`ContactForm` passes an async callback into `useFormValidation`. The callback waits for a simulated delay, runs optional `onSubmit`, runs optional `onSuccess`, and resets the form on success.
-
-There is no API request, email service, persistence layer, or backend integration for contact messages.
+`ContactForm` passes an async callback into `useFormValidation`. The callback sends `POST /api/contact` via `sendContactMessage`, handles `429` rate limiting, and resets the form on success. `useFormValidation` supports `initialData` for pre-fill.
 
 ## Current Limitations
 
-- Submission is simulated.
-- Contact messages are not persisted.
-- There is no spam protection or rate limiting.
+- Contact messages are persisted via backend but have no admin UI in this storefront.
+- Rate limiting is backend-enforced (`429`).

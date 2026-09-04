@@ -96,12 +96,12 @@ const Header = ({ categories }: { categories: Category[] }) => {
 
                 {showBrand && (
                     <Link href="/" className="brand flex items-center gap-1 text-white no-underline md:mr-2">
-                        <Image 
-                            src="/assets/images/logo/logo.png" 
-                            alt="Logo" 
-                            width={36} 
-                            height={36} 
-                            className="w-9 h-9 object-contain" 
+                        <Image
+                            src="/assets/images/logo/logo.png"
+                            alt="Logo"
+                            width={34}
+                            height={34}
+                            className="w-[34px] h-[34px] object-contain"
                         />
                         {isHomePage ? (
                             <h1 suppressHydrationWarning className="font-bold whitespace-nowrap">

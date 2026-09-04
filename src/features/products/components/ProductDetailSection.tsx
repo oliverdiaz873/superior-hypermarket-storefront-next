@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Product } from '@/types/product'
 import { ProductPageData } from '@/services/catalog/productPageData'
 import { useProductTranslation } from '../hooks/useProductTranslation'
+import { cleanPrice } from '@/lib/priceUtils'
 import './ProductDetailSection.css'
 
 interface ProductDetailSectionProps {
@@ -26,6 +27,9 @@ interface ProductDetailSectionProps {
  */
 const ProductDetailSection = ({ product, pageData, action }: ProductDetailSectionProps) => {
     const { name, description, specs, priceText, labels } = useProductTranslation(product, pageData)
+    const oldPrice = (product as unknown as { oldPrice?: string }).oldPrice
+    const discountPercentage = (product as unknown as { discountPercentage?: number }).discountPercentage
+    const isOffer = Boolean(oldPrice)
     const [modalOpen, setModalOpen] = useState(false)
     const modalRef = useRef<HTMLDivElement>(null)
     const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -130,7 +134,32 @@ const ProductDetailSection = ({ product, pageData, action }: ProductDetailSectio
                 {/* Información del producto */}
                 <div className="info-producto">
                     <h1>{name}</h1>
-                    <p className="precio">{priceText}</p>
+                    {isOffer && oldPrice ? (
+                        <div className="price-block" style={{ display: 'flex', alignItems: 'baseline', gap: '12px', flexWrap: 'wrap', marginBottom: '12px' }}>
+                            <ins className="precio-nuevo" style={{ textDecoration: 'none', fontSize: '1.6em', fontWeight: 700, color: '#ffcc00' }}>
+                                {cleanPrice(priceText)}
+                            </ins>
+                            <del className="precio-antiguo" style={{ fontSize: '1.1em', color: '#a1a1aa', textDecoration: 'line-through' }}>
+                                {cleanPrice(oldPrice)}
+                            </del>
+                            {typeof discountPercentage === 'number' && (
+                                <span
+                                    style={{
+                                        background: '#ffcc00',
+                                        color: '#000',
+                                        fontWeight: 700,
+                                        borderRadius: '9999px',
+                                        padding: '2px 8px',
+                                        fontSize: '0.9em',
+                                    }}
+                                >
+                                    -{discountPercentage}%
+                                </span>
+                            )}
+                        </div>
+                    ) : (
+                        <p className="precio">{priceText}</p>
+                    )}
 
                     <p className="descripcion">
                         {description}

@@ -6,9 +6,7 @@
  * `localItemsToMergePayload` construye el payload del merge descartando cualquier
  * precio/oferta del lado local.
  */
-import { unitLabel } from '@/lib/priceUtils'
 import { resolveApiImageUrl } from '@/lib/api-client'
-import type { Product } from '@/types/product'
 import type { CartItem, MergePayloadItem, ServerCart, ServerCartItem } from './cart-types'
 
 /** Entrada de addToCart: todo menos cantidad/unitLabel (los decide el CartContext). */
@@ -47,12 +45,11 @@ function discountFromPrices(price: number, oldPrice?: string): number | undefine
 /** Construye el item visual para el update optimista (usa la entrada de la UI). */
 export function createCartItem(product: CartItemInput): CartItem {
     const finalUnidad = product.unidad || (product.precioTexto ? product.precioTexto.split('/').pop()?.trim() : undefined)
-    const finalUnitLabel = unitLabel({ unidad: product.unidad, precioTexto: product.precioTexto } as Product)
     const discountPercentage = product.discountPercentage ?? discountFromPrices(product.precio, product.oldPrice)
     return {
         ...product,
         unidad: finalUnidad,
-        unitLabel: finalUnitLabel,
+        unitLabel: finalUnidad || 'unidad',
         cantidad: 1,
         discountPercentage,
         unitQuantity: product.unitQuantity,

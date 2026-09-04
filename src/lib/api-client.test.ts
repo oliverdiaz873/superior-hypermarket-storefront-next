@@ -7,6 +7,7 @@ import {
   mapApiProductsToProducts,
   sendContactMessage,
   ApiRequestError,
+  apiRequest,
 } from './api-client'
 import type { ApiProduct } from './api-client'
 
@@ -219,6 +220,85 @@ describe('api-client · product detail & category (E6.2.1 lang)', () => {
   })
 })
 
+describe('api-client · offers detail bug (precio != discount)', () => {
+  it('mapApiOfferToOfferProduct mapea discountPrice a precio y originalPrice a oldPrice', async () => {
+    const { mapApiOfferToOfferProduct } = await import('./api-client')
+    const offer = {
+      id: '58c36965-2a7e-4652-a804-980759c90d2e',
+      name: 'prueba',
+      price: 100,
+      originalPrice: 300,
+      discountPrice: 100,
+      discountPercentage: 67,
+      image: null,
+      categoryId: 'farmacia',
+      unit: 'kg',
+      unitQuantity: 1,
+    }
+    const mapped = mapApiOfferToOfferProduct(offer as never)
+    expect(mapped.id).toBe('58c36965-2a7e-4652-a804-980759c90d2e')
+    expect(mapped.precio).toBe(100)
+    expect(mapped.precioTexto).toContain('$100')
+    expect(mapped.oldPrice).toBe('RD$ 300')
+    expect(mapped.discountPercentage).toBe(67)
+  })
+
+  it('enriquece producto con oferta sobrescribiendo precio y precioTexto (bug reproduction: product.price 300 != offer 100)', async () => {
+    const { mapApiProductToProduct, mapApiOfferToOfferProduct } = await import('./api-client')
+    const apiProduct = {
+      id: '58c36965-2a7e-4652-a804-980759c90d2e',
+      sku: '909078',
+      name: 'prueba',
+      description: 'pastillas',
+      price: 300,
+      image: null,
+      categoryId: 'farmacia',
+      category: { name: 'Farmacia', slug: 'farmacia' },
+      status: 'active' as const,
+      isAvailable: true,
+      createdAt: '2026-08-28T19:13:32.555Z',
+      updatedAt: '2026-08-28T19:13:38.581Z',
+      unit: 'kg',
+      unitQuantity: 1,
+    }
+    const apiOffer = {
+      id: '58c36965-2a7e-4652-a804-980759c90d2e',
+      name: 'prueba',
+      price: 100,
+      originalPrice: 300,
+      discountPrice: 100,
+      discountPercentage: 67,
+      image: null,
+      categoryId: 'farmacia',
+      unit: 'kg',
+      unitQuantity: 1,
+    }
+    const mappedProduct = mapApiProductToProduct(apiProduct as never)
+    const mappedOffer = mapApiOfferToOfferProduct(apiOffer as never)
+    // Simula la lógica corregida de product/[id]/page.tsx
+    const offerMap = new Map([[mappedOffer.id, mappedOffer]])
+    let enriched = { ...mappedProduct }
+    const productOffer = offerMap.get(enriched.id)
+    if (productOffer) {
+      enriched = {
+        ...enriched,
+        precio: productOffer.precio,
+        precioTexto: productOffer.precioTexto,
+        oldPrice: productOffer.oldPrice,
+        discountPercentage: productOffer.discountPercentage,
+      }
+    }
+    expect(enriched.precio).toBe(100)
+    expect(enriched.precioTexto).toContain('$100')
+    expect(enriched.oldPrice).toBe('RD$ 300')
+    expect(enriched.discountPercentage).toBe(67)
+    // Sin la corrección, precio seguiría siendo 300 (bug)
+    const buggy = { ...mappedProduct, oldPrice: mappedOffer.oldPrice, discountPercentage: mappedOffer.discountPercentage } as typeof enriched
+    expect(buggy.precio).toBe(300)
+    expect(buggy.precio).not.toBe(100)
+  })
+})
+
 describe('api-client · contact (E4.5)', () => {
   const originalFetch = global.fetch
 
@@ -282,8 +362,82 @@ describe('api-client · contact (E4.5)', () => {
       name: 'ApiRequestError',
       status: 400,
       message: 'Message must be between 10 and 500 characters',
-    })
+})
+})
+
+describe('api-client · apiRequest error handling', () => {
+  const originalFetch = global.fetch
+
+  beforeEach(() => {
+    global.fetch = jest.fn() as unknown as typeof fetch
   })
+
+  afterEach(() => {
+    global.fetch = originalFetch
+    jest.restoreAllMocks()
+  })
+
+  it('lanza ApiRequestError con status 404 cuando la API devuelve 404', async () => {
+    const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>
+    mockFetch.mockResolvedValue(
+      new Response(
+        JSON.stringify({ success: false, message: 'Product not found' }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      )
+    )
+
+    await expect(apiRequest('/products/nonexistent')).rejects.toMatchObject({
+      name: 'ApiRequestError',
+      status: 404,
+      message: 'Product not found',
+    })
+
+    const error = await apiRequest('/products/nonexistent').catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(ApiRequestError)
+    expect((error as ApiRequestError).status).toBe(404)
+  })
+
+  it('lanza ApiRequestError con status 400 cuando la API devuelve 400', async () => {
+    const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>
+    mockFetch.mockResolvedValue(
+      new Response(
+        JSON.stringify({ success: false, message: 'Invalid input' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    )
+
+    const error = await apiRequest('/products').catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(ApiRequestError)
+    expect((error as ApiRequestError).status).toBe(400)
+    expect((error as ApiRequestError).message).toBe('Invalid input')
+  })
+
+  it('lanza ApiRequestError con status 500 cuando la API devuelve 500', async () => {
+    const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>
+    mockFetch.mockResolvedValue(
+      new Response(
+        JSON.stringify({ success: false, message: 'Internal server error' }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      )
+    )
+
+    const error = await apiRequest('/products').catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(ApiRequestError)
+    expect((error as ApiRequestError).status).toBe(500)
+  })
+
+  it('lanza ApiRequestError con mensaje vacío cuando el cuerpo no es JSON', async () => {
+    const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>
+    mockFetch.mockResolvedValue(
+      new Response('internal error', { status: 500 })
+    )
+
+    const error = await apiRequest('/products').catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(ApiRequestError)
+    expect((error as ApiRequestError).status).toBe(500)
+    expect((error as ApiRequestError).message).toBe('')
+  })
+})
 
   it('sendContactMessage expone status 429 para rate limit', async () => {
     const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>

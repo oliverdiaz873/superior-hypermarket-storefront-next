@@ -96,7 +96,8 @@ export const products: Product[] = [
         precio: 350, // número para carrito
         precioTexto: "$350.00 / 1 LB", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/carnes-pescados-mariscos/mariscos/camarones-crudos.avif",
-        unidad: "lb"
+        unidad: "lb",
+        quantity: 1
     },
     {
         id: "camarones_precocidos",
@@ -106,7 +107,8 @@ export const products: Product[] = [
         precio: 400, // número para carrito
         precioTexto: "$400.00 / 1 LB", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/carnes-pescados-mariscos/mariscos/camarones-pre-cocidos.avif",
-        unidad: "lb"
+        unidad: "lb",
+        quantity: 1
     },
     {
         id: "carne_de_res_para_hamburguesas",
@@ -116,7 +118,8 @@ export const products: Product[] = [
         precio: 370, // número para carrito
         precioTexto: "$370.00 / 1 LB", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/carnes-pescados-mariscos/res/carne-de-res.avif",
-        unidad: "lb"
+        unidad: "lb",
+        quantity: 1
     },
     {
         id: "chuleta_de_cerdo",
@@ -126,7 +129,8 @@ export const products: Product[] = [
         precio: 300, // número para carrito
         precioTexto: "$300.00 / 1 LB", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/carnes-pescados-mariscos/cerdo/chuleta-de-cerdo.avif",
-        unidad: "lb"
+        unidad: "lb",
+        quantity: 1
     },
     {
         id: "pollo_entero_don_pollo",
@@ -136,7 +140,8 @@ export const products: Product[] = [
         precio: 300, // número para carrito
         precioTexto: "$300.00 / unidad", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/carnes-pescados-mariscos/pollo/pollo.avif",
-        unidad: "unidad"
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "tilapia_roja",
@@ -146,7 +151,8 @@ export const products: Product[] = [
         precio: 250, // número para carrito
         precioTexto: "$250.00 / 1 LB", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/carnes-pescados-mariscos/pescado/tilapia-roja.avif",
-        unidad: "lb"
+        unidad: "lb",
+        quantity: 1
     },
 
     //Despensa
@@ -157,7 +163,9 @@ export const products: Product[] = [
         categoria: "despensa",
         precio: 95, // número para carrito
         precioTexto: "$95.00", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/despensa/aceites/aceite-crisol.avif"
+        imagen: "/assets/images/productos/alimentos/despensa/aceites/aceite-crisol.avif",
+        unidad: "ml",
+        quantity: 1890
     },
     {
         id: "aceite_oliva_extra_virgen",
@@ -166,7 +174,9 @@ export const products: Product[] = [
         categoria: "despensa",
         precio: 230, // número para carrito
         precioTexto: "$230.00", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/despensa/aceites/aceite-de-oliva-extra-virgen.avif"
+        imagen: "/assets/images/productos/alimentos/despensa/aceites/aceite-de-oliva-extra-virgen.avif",
+        unidad: "ml",
+        quantity: 500
     },
     {
         id: "mayonesa_baldom",
@@ -175,7 +185,9 @@ export const products: Product[] = [
         categoria: "despensa",
         precio: 95, // número para carrito
         precioTexto: "$95", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/despensa/aderezos-y-salsas/mayonesa-baldom.avif"
+        imagen: "/assets/images/productos/alimentos/despensa/aderezos-y-salsas/mayonesa-baldom.avif",
+        unidad: "ml",
+        quantity: 473
     },
     {
         id: "sal_refisal",
@@ -184,7 +196,9 @@ export const products: Product[] = [
         categoria: "despensa",
         precio: 65, // número para carrito
         precioTexto: "$65.00", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/despensa/condimentos/sal-marina-refisal.jpg"
+        imagen: "/assets/images/productos/alimentos/despensa/condimentos/sal-marina-refisal.jpg",
+        unidad: "g",
+        quantity: 465
     },
     {
         id: "sazon_completo_maggi",
@@ -203,7 +217,7 @@ export const products: Product[] = [
         precio: 150, // número para carrito
         precioTexto: "$150 / la caja", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/despensa/condimentos/sopita-dona-gallina.avif",
-        unidad: "caja"
+        unidad: "caja", quantity: 1
     },
     {
         id: "vinagre_baldom",
@@ -213,7 +227,7 @@ export const products: Product[] = [
         precio: 87, // número para carrito
         precioTexto: "$87 / botella", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/despensa/condimentos/vinagre-baldom.avif",
-        unidad: "botella"
+        unidad: "botella", quantity: 1
     },
 
     //Enlatados
@@ -234,7 +248,8 @@ export const products: Product[] = [
         categoria: "enlatados",
         precio: 180, // número para carrito
         precioTexto: "Precio: $180 / 1 Lata", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/enlatados/gandules-verdes-goya.avif"
+        imagen: "/assets/images/productos/alimentos/enlatados/gandules-verdes-goya.avif",
+        unidad: "lata"
     },
     {
         id: "habichuelas_negras_goya",
@@ -243,7 +258,8 @@ export const products: Product[] = [
         categoria: "enlatados",
         precio: 50, // número para carrito
         precioTexto: "Precio: $50 / 1 Lata", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/enlatados/habichuelas-negras-goya.avif"
+        imagen: "/assets/images/productos/alimentos/enlatados/habichuelas-negras-goya.avif",
+        unidad: "lata"
     },
     {
         id: "maiz_la_famosa",
@@ -252,7 +268,8 @@ export const products: Product[] = [
         categoria: "enlatados",
         precio: 45, // número para carrito
         precioTexto: "Precio: $45 / 1 Lata", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/enlatados/maiz-la-famosa.avif"
+        imagen: "/assets/images/productos/alimentos/enlatados/maiz-la-famosa.avif",
+        unidad: "lata"
     },
     {
         id: "salchichas_jaja",
@@ -261,7 +278,8 @@ export const products: Product[] = [
         categoria: "enlatados",
         precio: 45, // número para carrito
         precioTexto: "Precio: $45 / 1 Lata", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/enlatados/salchichas-jaja.avif"
+        imagen: "/assets/images/productos/alimentos/enlatados/salchichas-jaja.avif",
+        unidad: "lata"
     },
     {
         id: "sardinas_gord",
@@ -270,7 +288,8 @@ export const products: Product[] = [
         categoria: "enlatados",
         precio: 85, // número para carrito
         precioTexto: "Precio: $85 / 1 Lata", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/enlatados/sardinas-gord.avif"
+        imagen: "/assets/images/productos/alimentos/enlatados/sardinas-gord.avif",
+        unidad: "lata"
     },
     {
         id: "tomates_pelados_la_famosa",
@@ -279,7 +298,8 @@ export const products: Product[] = [
         categoria: "enlatados",
         precio: 60, // número para carrito
         precioTexto: "Precio: $60 / 1 Lata", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/enlatados/tomates-pelados.avif"
+        imagen: "/assets/images/productos/alimentos/enlatados/tomates-pelados.avif",
+        unidad: "lata"
     },
 
     //Frutas y Verduras
@@ -291,7 +311,8 @@ export const products: Product[] = [
         precio: 80, // número para carrito
         precioTexto: "Precio: $80 la unidad", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/frutas-y-verduras/ajies-morron.avif",
-        unidad: "unidad"
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "cebollas_rojas",
@@ -301,7 +322,8 @@ export const products: Product[] = [
         precio: 170, // número para carrito
         precioTexto: "Precio: $170 1KG", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/frutas-y-verduras/cebolla-roja.avif",
-        unidad: "kg"
+        unidad: "kg",
+        quantity: 1
     },
     {
         id: "fresas",
@@ -311,7 +333,8 @@ export const products: Product[] = [
         precio: 250, // número para carrito
         precioTexto: "Precio: $250 1 paquete", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/frutas-y-verduras/fresas.avif",
-        unidad: "paquete"
+        unidad: "paquete",
+        quantity: 1
     },
     {
         id: "limones_persa",
@@ -321,7 +344,8 @@ export const products: Product[] = [
         precio: 200, // número para carrito
         precioTexto: "Precio: $200 1KG", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/frutas-y-verduras/limon-persa.avif",
-        unidad: "lb"
+        unidad: "lb",
+        quantity: 1
     },
     {
         id: "mandarinas",
@@ -340,7 +364,8 @@ export const products: Product[] = [
         precio: 50, // número para carrito
         precioTexto: "Precio: $50 1KG", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/frutas-y-verduras/manzana-amarilla.avif",
-        unidad: "kg"
+        unidad: "kg",
+        quantity: 1
     },
     {
         id: "manzanas_rojas",
@@ -350,7 +375,8 @@ export const products: Product[] = [
         precio: 65, // número para carrito
         precioTexto: "Precio: $65 1KG", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/frutas-y-verduras/manzana-roja.avif",
-        unidad: "kg"
+        unidad: "kg",
+        quantity: 1
     },
     {
         id: "manzanas_verdes",
@@ -360,7 +386,8 @@ export const products: Product[] = [
         precio: 45, // número para carrito
         precioTexto: "Precio: $45 / lb", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/frutas-y-verduras/manzana-verde.avif",
-        unidad: "lb"
+        unidad: "lb",
+        quantity: 1
     },
     {
         id: "pepinos",
@@ -397,7 +424,8 @@ export const products: Product[] = [
         precio: 80, // número para carrito
         precioTexto: "Precio: $80 1KG", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/frutas-y-verduras/zanahoria.avif",
-        unidad: "kg"
+        unidad: "kg",
+        quantity: 1
     },
 
     //Lácteos y huevos
@@ -418,7 +446,9 @@ export const products: Product[] = [
         categoria: "lacteos-y-huevos",
         precio: 65, // número para carrito
         precioTexto: "$65.00", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/alimentos/lacteos-y-huevos/leche/leche-entera-rica.avif"
+        imagen: "/assets/images/productos/alimentos/lacteos-y-huevos/leche/leche-entera-rica.avif",
+        unidad: "litro",
+        quantity: 1
     },
     {
         id: "queso_gorgonzola",
@@ -428,7 +458,8 @@ export const products: Product[] = [
         precio: 350, // número para carrito
         precioTexto: "Precio: $350 / 1 LB", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/lacteos-y-huevos/queso/queso-gorgonzola.avif",
-        unidad: "lb"
+        unidad: "lb",
+        quantity: 1
     },
     {
         id: "queso_gouda",
@@ -447,7 +478,8 @@ export const products: Product[] = [
         precio: 150, // número para carrito
         precioTexto: "Precio: $150", // texto para mostrar en resultados
         imagen: "/assets/images/productos/alimentos/lacteos-y-huevos/yogurt/yogurt-de-fresa.avif",
-        unidad: "unidad"
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "yogurt_natural_rica",
@@ -1347,7 +1379,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-hombres",
         precio: 4000, // número para carrito
         precioTexto: "Precio: $4,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalon-negro.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalon-negro.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalones_de_golf",
@@ -1356,7 +1390,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-hombres",
         precio: 2000, // número para carrito
         precioTexto: "Precio: $2,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalones-de-golf.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalones-de-golf.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalones_deportivos_joggers",
@@ -1365,7 +1401,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-hombres",
         precio: 3000, // número para carrito
         precioTexto: "Precio: $3,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalones-deportivos-joggers.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalones-deportivos-joggers.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalones_jeans",
@@ -1374,7 +1412,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-hombres",
         precio: 5000, // número para carrito
         precioTexto: "Precio: $5,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalones-jeans.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalones-jeans.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalones_joggers",
@@ -1383,7 +1423,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-hombres",
         precio: 4000, // número para carrito
         precioTexto: "Precio: $4,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalones-joggers.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-hombres/pantalones-joggers.avif",
+        unidad: "unidad",
+        quantity: 1
     },
 
     // Pantalones para Mujeres
@@ -1395,7 +1437,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-mujeres",
         precio: 1500, // número para carrito
         precioTexto: "Precio: $1,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/licra.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/licra.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalon_acampanado",
@@ -1404,7 +1448,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-mujeres",
         precio: 2500, // número para carrito
         precioTexto: "Precio: $2,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/pantalon-acampanado.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/pantalon-acampanado.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalon_casual",
@@ -1413,7 +1459,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-mujeres",
         precio: 4000, // número para carrito
         precioTexto: "Precio: $4,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/pantalon-casual.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/pantalon-casual.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalon_jean",
@@ -1422,7 +1470,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-mujeres",
         precio: 5000, // número para carrito
         precioTexto: "Precio: $5,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/pantalon-jean-mujer.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/pantalon-jean-mujer.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalon_liso_mujer",
@@ -1431,7 +1481,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-mujeres",
         precio: 4000, // número para carrito
         precioTexto: "Precio: $4,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/pantalon-liso-mujer.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-mujeres/pantalon-liso-mujer.avif",
+        unidad: "unidad",
+        quantity: 1
     },
 
     // Pantalones para niños
@@ -1442,7 +1494,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-ninos",
         precio: 1000, // número para carrito
         precioTexto: "Precio: $1,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/jean-ninos.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/jean-ninos.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "licra_para_ninos",
@@ -1451,7 +1505,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-ninos",
         precio: 1500, // número para carrito
         precioTexto: "Precio: $1,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/licra.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/licra.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalon_deportivo",
@@ -1460,7 +1516,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-ninos",
         precio: 2300, // número para carrito
         precioTexto: "Precio: $2,300", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/pantalon-deportivo.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/pantalon-deportivo.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalon_liso",
@@ -1469,7 +1527,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-ninos",
         precio: 2000, // número para carrito
         precioTexto: "Precio: $2,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/pantalon-liso.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/pantalon-liso.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "pantalones_lisos_para_ninos",
@@ -1478,7 +1538,9 @@ export const products: Product[] = [
         categoria: "pantalones-para-ninos",
         precio: 2500, // número para carrito
         precioTexto: "Precio: $2,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/pantalon-para-ninos.avif"
+        imagen: "/assets/images/productos/ropa/pantalones-para-ninos/pantalon-para-ninos.avif",
+        unidad: "unidad",
+        quantity: 1
     },
 
     // Trajes para Hombres
@@ -1489,7 +1551,9 @@ export const products: Product[] = [
         categoria: "trajes-para-hombres",
         precio: 5000, // número para carrito
         precioTexto: "Precio: $5,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-2piezas.avif"
+        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-2piezas.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "traje_azul",
@@ -1498,7 +1562,9 @@ export const products: Product[] = [
         categoria: "trajes-para-hombres",
         precio: 4000, // número para carrito
         precioTexto: "Precio: $4,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-azul.avif"
+        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-azul.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "traje_completo",
@@ -1507,7 +1573,9 @@ export const products: Product[] = [
         categoria: "trajes-para-hombres",
         precio: 3000, // número para carrito
         precioTexto: "Precio: $3,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-completo.avif"
+        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-completo.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "traje_elegante",
@@ -1516,7 +1584,9 @@ export const products: Product[] = [
         categoria: "trajes-para-hombres",
         precio: 3500, // número para carrito
         precioTexto: "Precio: $3,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-elegante.avif"
+        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-elegante.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "traje_negro",
@@ -1525,7 +1595,9 @@ export const products: Product[] = [
         categoria: "trajes-para-hombres",
         precio: 4200, // número para carrito
         precioTexto: "Precio: $4,200", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-negro.avif"
+        imagen: "/assets/images/productos/ropa/trajes-para-hombre/traje-negro.avif",
+        unidad: "unidad",
+        quantity: 1
     },
 
     //Vestidos
@@ -1536,7 +1608,9 @@ export const products: Product[] = [
         categoria: "vestidos",
         precio: 5000, // número para carrito
         precioTexto: "Precio: $5,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-ajustado.avif"
+        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-ajustado.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "vestido_cuello_cuadrado",
@@ -1545,7 +1619,9 @@ export const products: Product[] = [
         categoria: "vestidos",
         precio: 4500, // número para carrito
         precioTexto: "Precio: $4,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-cuello-cuadrado.avif"
+        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-cuello-cuadrado.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "vestido_de_invierno",
@@ -1554,7 +1630,9 @@ export const products: Product[] = [
         categoria: "vestidos",
         precio: 6000, // número para carrito
         precioTexto: "Precio: $6,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-de-invierno.avif"
+        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-de-invierno.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "vestido_elegante",
@@ -1563,7 +1641,9 @@ export const products: Product[] = [
         categoria: "vestidos",
         precio: 3500, // número para carrito
         precioTexto: "Precio: $3,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-elegante.avif"
+        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-elegante.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "vestido_negro",
@@ -1572,7 +1652,9 @@ export const products: Product[] = [
         categoria: "vestidos",
         precio: 4200, // número para carrito
         precioTexto: "Precio: $4,200", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-negro.avif"
+        imagen: "/assets/images/productos/ropa/vestido-de-mujer/vestido-negro.avif",
+        unidad: "unidad",
+        quantity: 1
     },
 
     //--Tecnología--//
@@ -1585,7 +1667,9 @@ export const products: Product[] = [
         categoria: "bocinas",
         precio: 5000, // número para carrito
         precioTexto: "Precio: $5000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/bocina/bocina-aiwa.png"
+        imagen: "/assets/images/productos/tecnologia/bocina/bocina-aiwa.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "bocina_lg",
@@ -1594,7 +1678,9 @@ export const products: Product[] = [
         categoria: "bocinas",
         precio: 4500, // número para carrito
         precioTexto: "Precio: $4,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/bocina/bocina-lg.png"
+        imagen: "/assets/images/productos/tecnologia/bocina/bocina-lg.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "bocina_samsung",
@@ -1603,7 +1689,9 @@ export const products: Product[] = [
         categoria: "bocinas",
         precio: 6000, // número para carrito
         precioTexto: "Precio: $6,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/bocina/bocina-samsung.avif"
+        imagen: "/assets/images/productos/tecnologia/bocina/bocina-samsung.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "bocina_stage",
@@ -1612,7 +1700,9 @@ export const products: Product[] = [
         categoria: "bocinas",
         precio: 5500, // número para carrito
         precioTexto: "Precio: $5,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/bocina/bocina-stage.png"
+        imagen: "/assets/images/productos/tecnologia/bocina/bocina-stage.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "bocina_tecnomaster",
@@ -1621,7 +1711,9 @@ export const products: Product[] = [
         categoria: "bocinas",
         precio: 9000, // número para carrito
         precioTexto: "Precio: $9,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/bocina/bocina-tecnomaster.avif"
+        imagen: "/assets/images/productos/tecnologia/bocina/bocina-tecnomaster.avif",
+        unidad: "unidad",
+        quantity: 1
     },
 
     //Celulares
@@ -1684,7 +1776,9 @@ export const products: Product[] = [
         categoria: "laptops",
         precio: 45000, // número para carrito
         precioTexto: "Precio: $45,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/laptops/laptop-asus.png"
+        imagen: "/assets/images/productos/tecnologia/laptops/laptop-asus.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "laptop_dell",
@@ -1693,7 +1787,9 @@ export const products: Product[] = [
         categoria: "laptops",
         precio: 48000, // número para carrito
         precioTexto: "Precio: $48,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/laptops/laptop-dell.png"
+        imagen: "/assets/images/productos/tecnologia/laptops/laptop-dell.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "laptop_dragonx",
@@ -1702,7 +1798,9 @@ export const products: Product[] = [
         categoria: "laptops",
         precio: 54000, // número para carrito
         precioTexto: "Precio: $54,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/laptops/laptop-dragonx.png"
+        imagen: "/assets/images/productos/tecnologia/laptops/laptop-dragonx.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "laptop_hp",
@@ -1711,7 +1809,9 @@ export const products: Product[] = [
         categoria: "laptops",
         precio: 56000, // número para carrito
         precioTexto: "Precio: $56,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/laptops/laptop-hp.png"
+        imagen: "/assets/images/productos/tecnologia/laptops/laptop-hp.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "laptop_lenovo",
@@ -1720,7 +1820,9 @@ export const products: Product[] = [
         categoria: "laptops",
         precio: 70000, // número para carrito
         precioTexto: "Precio: $70,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/laptops/laptop-lenovo.png"
+        imagen: "/assets/images/productos/tecnologia/laptops/laptop-lenovo.png",
+        unidad: "unidad",
+        quantity: 1
     },
 
     //Tablets
@@ -1731,7 +1833,9 @@ export const products: Product[] = [
         categoria: "tablets",
         precio: 30000, // número para carrito
         precioTexto: "Precio: $30,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/tablets/tablet-apple.avif"
+        imagen: "/assets/images/productos/tecnologia/tablets/tablet-apple.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "tablet_rted",
@@ -1740,7 +1844,9 @@ export const products: Product[] = [
         categoria: "tablets",
         precio: 23000, // número para carrito
         precioTexto: "Precio: $23,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/tablets/tablet-rted.avif"
+        imagen: "/assets/images/productos/tecnologia/tablets/tablet-rted.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "tablet_samsung",
@@ -1749,7 +1855,9 @@ export const products: Product[] = [
         categoria: "tablets",
         precio: 26000, // número para carrito
         precioTexto: "Precio: $26,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/tablets/tablet-samsung.avif"
+        imagen: "/assets/images/productos/tecnologia/tablets/tablet-samsung.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "tablet_tcl",
@@ -1758,7 +1866,9 @@ export const products: Product[] = [
         categoria: "tablets",
         precio: 15000, // número para carrito
         precioTexto: "Precio: $15,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/tablets/tablet-tcl.png"
+        imagen: "/assets/images/productos/tecnologia/tablets/tablet-tcl.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "tablet_tecnomaster",
@@ -1767,7 +1877,9 @@ export const products: Product[] = [
         categoria: "tablets",
         precio: 22000, // número para carrito
         precioTexto: "Precio: $22,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/tablets/tablet-tecnomaster.avif"
+        imagen: "/assets/images/productos/tecnologia/tablets/tablet-tecnomaster.avif",
+        unidad: "unidad",
+        quantity: 1
     },
 
     //Televisores
@@ -1778,7 +1890,9 @@ export const products: Product[] = [
         categoria: "televisores",
         precio: 36500, // número para carrito
         precioTexto: "Precio: $36,500", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/televisores/tv-led-50pulgadas.png"
+        imagen: "/assets/images/productos/tecnologia/televisores/tv-led-50pulgadas.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "televisor_led_lg",
@@ -1787,7 +1901,9 @@ export const products: Product[] = [
         categoria: "televisores",
         precio: 57000, // número para carrito
         precioTexto: "Precio: $57,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/televisores/tv-led-lg.png"
+        imagen: "/assets/images/productos/tecnologia/televisores/tv-led-lg.png",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "televisor_led_samsung",
@@ -1796,7 +1912,9 @@ export const products: Product[] = [
         categoria: "televisores",
         precio: 56000, // número para carrito
         precioTexto: "Precio: $56,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/televisores/tv-led-samsung.avif"
+        imagen: "/assets/images/productos/tecnologia/televisores/tv-led-samsung.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "televisor_led_tecnomaster",
@@ -1805,7 +1923,9 @@ export const products: Product[] = [
         categoria: "televisores",
         precio: 55200, // número para carrito
         precioTexto: "Precio: $55,200", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/televisores/tv-led-tecnomaster.avif"
+        imagen: "/assets/images/productos/tecnologia/televisores/tv-led-tecnomaster.avif",
+        unidad: "unidad",
+        quantity: 1
     },
     {
         id: "televisor_samsung_75_pulgadas",
@@ -1814,7 +1934,9 @@ export const products: Product[] = [
         categoria: "televisores",
         precio: 44000, // número para carrito
         precioTexto: "Precio: $44,000", // texto para mostrar en resultados
-        imagen: "/assets/images/productos/tecnologia/televisores/tv-samsung.png"
+        imagen: "/assets/images/productos/tecnologia/televisores/tv-samsung.png",
+        unidad: "unidad",
+        quantity: 1
     },
 ];
 

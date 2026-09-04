@@ -38,85 +38,137 @@ export const cleanPrice = (text: string): string => {
     return match ? match[1] : cleaned
 }
 
+// Unidades que SÍ pluralizan (contables)
+const COUNTABLE_UNITS = new Set([
+    'unidad',
+    'unit',
+    'litro',
+    'liters',
+    'paquete',
+    'pack',
+    'caja',
+    'box',
+    'botella',
+    'bottle',
+    'lata',
+    'can',
+])
+
+// Unidades que NO pluralizan (peso/volumen)
+const NON_COUNTABLE_UNITS = new Set([
+    'kg',
+    'g',
+    'lb',
+    'oz',
+    'ml',
+    'l',
+])
+
 /**
- * Obtiene la etiqueta de unidad de medida de un producto
+ * Formatea la etiqueta de unidad con cantidad y pluralización correcta.
  * 
- * Prioridad de resolución:
- * 1. Campo explícito `product.unidad` si existe
- * 2. Texto después de "/" en `precioTexto` (ej: "kg", "litro")
- * 3. Cualquier texto descriptivo después del precio
- * 4. Fallback a "unidad" si no se encuentra nada
+ * Reglas:
+ * - Sin unidad → ''
+ * - Cantidad === 1 → solo unidad (singular)
+ * - Cantidad !== 1 → cantidad + unidad (plural si es contable, sin cambios si no contable)
  * 
- * @param product - Objeto Product con información del producto
- * @returns Etiqueta de unidad (ej: "kg", "unidad", "litro", "paquete")
- * 
- * @example
- * ```typescript
- * // Product con unidad explícita
- * unitLabel({ nombre: "Arroz", unidad: "kg" }) // "kg"
- * 
- * // Product con precio que incluye unidad
- * unitLabel({ nombre: "Leche", precioTexto: "Precio: $2.50 / litro" }) // "litro"
- * 
- * // Product sin unidad definida
- * unitLabel({ nombre: "Plátano", precioTexto: "Precio: $1.20" }) // "unidad"
- * ```
- * 
- * Beneficio: Consistencia en la visualización de unidades de medida
+ * @param product - Product con unidad y quantity
+ * @param locale - Locale para determinar pluralización ('es' | 'en')
+ * @returns Etiqueta formateada (ej: "unidad", "2 unidades", "kg", "2 kg", "0.5 kg")
  */
-export const unitLabel = (product: Product): string => {
-    // Prioridad 1: Campo unidad explícito (más preciso)
-    const explicit = product.unidad?.trim()
-    if (explicit) return explicit
-
-    // Prioridad 2: Texto después del "/" en precioTexto
-    const raw = product.precioTexto?.trim()
-    if (raw) {
-        const parts = raw.split('/')
-        if (parts.length > 1) {
-            let last = parts[parts.length - 1].trim().replace(/\.$/, '')
-            if (last) {
-                last = last.replace(/^\d+\s*/i, '').trim().toLowerCase()
-                if (last) return last
-            }
-        }
-
-        let afterPrecio = raw.replace(/^Precio:\s*/i, '').replace(/^\$[\d.,]+\s*/i, '').trim()
-        if (afterPrecio) {
-            afterPrecio = afterPrecio.replace(/^\d+\s*/i, '').trim().toLowerCase()
-            if (afterPrecio) return afterPrecio
-        }
+export function formatUnitLabel(product: Product, locale: 'es' | 'en' = 'es'): string {
+    const unit = product.unidad?.trim().toLowerCase()
+    const quantity = product.quantity
+    
+    if (!unit || quantity == null) return ''
+    
+    // Cantidad 1 → solo unidad (singular)
+    if (quantity === 1) {
+        return unit
     }
+    
+    // Cantidad !== 1 → cantidad + unidad
+    const qtyStr = String(quantity)
+    
+    // Unidades contables → pluralizar
+    if (COUNTABLE_UNITS.has(unit)) {
+        const plural = pluralizeUnit(unit, locale)
+        return `${qtyStr} ${plural}`
+    }
+    
+    // Unidades no contables → no pluralizar
+    if (NON_COUNTABLE_UNITS.has(unit)) {
+        return `${qtyStr} ${unit}`
+    }
+    
+    // Fallback: tratar como contable si no está en ninguna lista
+    const plural = pluralizeUnit(unit, locale)
+    return `${qtyStr} ${plural}`
+}
 
-    // Fallback: "unidad" genérico
-    return 'unidad'
+/**
+ * Pluraliza una unidad según el locale.
+ * Reglas simples para unidades conocidas; fallback genérico.
+ */
+function pluralizeUnit(unit: string, locale: 'es' | 'en'): string {
+    // Mapeo explícito para unidades con plural irregular
+    const irregularPlurals: Record<string, Record<'es' | 'en', string>> = {
+        'unidad': { es: 'unidades', en: 'units' },
+        'unit': { es: 'unidades', en: 'units' },
+        'litro': { es: 'litros', en: 'liters' },
+        'liters': { es: 'litros', en: 'liters' },
+    }
+    
+    if (irregularPlurals[unit]) {
+        return irregularPlurals[unit][locale]
+    }
+    
+    // Reglas genéricas simples
+    if (locale === 'es') {
+        if (unit.endsWith('z')) return unit.slice(0, -1) + 'ces'  // lápiz → lápices
+        if (/[aeiou]s$/.test(unit)) return unit  // crisis → crisis (invariable)
+        if (unit.endsWith('s')) return unit  // ya termina en s
+        return unit + 's'
+    } else {
+        // Inglés simple
+        if (unit.endsWith('y') && !/[aeiou]y$/.test(unit)) return unit.slice(0, -1) + 'ies'
+        if (/[sxz]$/.test(unit) || unit.endsWith('ch') || unit.endsWith('sh')) return unit + 'es'
+        return unit + 's'
+    }
 }
 
 interface FormatPriceOptions {
     pricePrefix?: string
     translatedUnit?: string
+    locale?: 'es' | 'en'
 }
 
 /**
  * Construye una etiqueta de precio localizada para la UI.
- *
- * Mantiene el comportamiento anterior:
- * - Si el producto tiene unidad explícita o `precioTexto` incluye un formato `/ unidad`,
- *   la conserva.
- * - Si no la tiene, solo muestra el precio.
+ * 
+ * Fuente única de verdad para presentar precio + unidad.
+ * 
+ * @param product - Product con precio, unidad y quantity
+ * @param options - Opciones de formato
+ * @returns String formateado (ej: "Precio: $100 / 2 unidades", "Precio: $100 / kg")
  */
 export const formatProductPrice = (
     product: Product,
-    { pricePrefix = 'Precio: ', translatedUnit }: FormatPriceOptions = {}
+    { pricePrefix = 'Precio: ', translatedUnit, locale = 'es' }: FormatPriceOptions = {}
 ): string => {
     const price = `$${product.precio.toLocaleString()}`
-    const hasExplicitUnit = Boolean(product.unidad?.trim())
-    const hasInlineUnit = product.precioTexto?.includes('/') ?? false
-
-    if (!hasExplicitUnit && !hasInlineUnit) {
+    
+    // Si ya nos pasan la unidad traducida (desde useProductTranslation), usarla
+    if (translatedUnit) {
+        return `${pricePrefix}${price} / ${translatedUnit}`
+    }
+    
+    // Usar formatUnitLabel como fuente de verdad para decidir si hay unidad
+    const unitLabel = formatUnitLabel(product, locale)
+    
+    if (!unitLabel) {
         return `${pricePrefix}${price}`
     }
-
-    const unit = translatedUnit ?? unitLabel(product)
-    return `${pricePrefix}${price} / ${unit}`
+    
+    return `${pricePrefix}${price} / ${unitLabel}`
 }

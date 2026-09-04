@@ -86,12 +86,6 @@ const DesktopNav = ({ categories }: { categories: Category[] }) => {
                         {t('nav.offers')}
                     </Link>
                 </li>
-
-                <li>
-                    <Link href="/contact" className={navLinkClass}>
-                        {t('nav.contact')}
-                    </Link>
-                </li>
             </ul>
         </nav>
     )

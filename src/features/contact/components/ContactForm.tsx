@@ -1,22 +1,74 @@
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { ApiRequestError, sendContactMessage } from '@/lib/api-client'
 import { useFormValidation } from '../hooks/useFormValidation'
+import type { Order } from '@/types/order'
 import './ContactForm.css'
+import '@/features/help/components/HelpLayout.css'
 
 interface ContactFormProps {
     onSuccess?: () => void
+    helpCategory?: string
+    helpTopic?: string
+    initialOrderId?: string
+    orders?: Order[]
+    isAuthenticated?: boolean
+    initialName?: string
+    initialEmail?: string
 }
 
-const ContactForm = ({ onSuccess }: ContactFormProps) => {
-    const t = useTranslations('contact');
+const ContactForm = ({
+    onSuccess,
+    helpCategory,
+    helpTopic,
+    initialOrderId,
+    orders = [],
+    isAuthenticated = false,
+    initialName,
+    initialEmail,
+}: ContactFormProps) => {
+    const t = useTranslations('contact')
+    const tHelp = useTranslations('help')
+    const [selectedOrderId, setSelectedOrderId] = useState(initialOrderId ?? '')
+    const [genericOrderId, setGenericOrderId] = useState(initialOrderId ?? '')
+
+    // Resolve display names for chips
+    const categoryName = helpCategory ? (() => { try { return tHelp(`categories.${helpCategory}`) } catch { return helpCategory } })() : ''
+    const topicName = helpCategory && helpTopic ? (() => { try { return tHelp(`topics.${helpCategory}.${helpTopic}.title`) } catch { return helpTopic } })() : ''
+
+    const selectedOrder = orders.find((o) => o.id === selectedOrderId)
+    const orderDisplay = selectedOrder ? `#${selectedOrder.orderNumber}` : selectedOrderId ? `#${selectedOrderId}` : ''
+
+    // Contextual placeholder for message (i18n)
+    const messagePlaceholder = (() => {
+        if (helpCategory && helpTopic) {
+            if (selectedOrderId && orderDisplay) {
+                return tHelp('contact_context.message_placeholder_with_order', { orderNumber: orderDisplay })
+            }
+            return tHelp('contact_context.message_placeholder_topic', { topic: topicName || helpTopic || '' })
+        }
+        return t('form.placeholders.message')
+    })()
+
     const { formData, errors, submitError, isSubmitting, handleInputChange, handleSubmit } = useFormValidation(async (data) => {
         try {
-            // E4.5: envío real al backend (POST /api/contact), sin simulación.
+            let prefix = ''
+            if (helpCategory && helpTopic) {
+                prefix = `[${helpCategory}/${helpTopic}]`
+                const orderIdToUse = isAuthenticated ? selectedOrderId : genericOrderId.trim()
+                if (orderIdToUse) {
+                    prefix += `[pedido:${orderIdToUse}] `
+                } else {
+                    prefix += ' '
+                }
+            }
+            const messageToSend = prefix + data.mensaje.trim()
+
             await sendContactMessage({
                 name: data.nombre.trim(),
                 email: data.email.trim(),
                 phone: data.telefono.trim() || undefined,
-                message: data.mensaje.trim()
+                message: messageToSend
             })
         } catch (err) {
             if (err instanceof ApiRequestError && err.status === 429) {
@@ -31,11 +83,69 @@ const ContactForm = ({ onSuccess }: ContactFormProps) => {
         if (onSuccess) {
             onSuccess()
         }
-    }, { resetOnSuccess: true })
+    }, {
+        resetOnSuccess: true,
+        initialData: {
+            nombre: initialName ?? '',
+            email: initialEmail ?? '',
+            mensaje: '',
+        }
+    })
+
+    const showHelpContext = Boolean(helpCategory && helpTopic)
 
     return (
         <form onSubmit={handleSubmit} className="contacto-form" noValidate>
             <h1>{t('form.title')}</h1>
+
+            {showHelpContext && (
+                <div className="help-chips" style={{ marginBottom: '16px' }}>
+                    <span className="help-chip">
+                        {categoryName} › {topicName}
+                    </span>
+                    {(selectedOrderId || genericOrderId) && (
+                        <span className="help-chip help-chip-order">
+                            Pedido: {isAuthenticated ? (orderDisplay || `#${selectedOrderId}`) : (genericOrderId ? `#${genericOrderId.trim()}` : '')}
+                        </span>
+                    )}
+                </div>
+            )}
+
+            {showHelpContext && isAuthenticated && orders.length > 0 && (
+                <div className="input-box mb-5 md:mb-6">
+                    <label htmlFor="help_order">{tHelp('contact_context.order_selector_label')}</label>
+                    <select
+                        id="help_order"
+                        value={selectedOrderId}
+                        onChange={(e) => setSelectedOrderId(e.target.value)}
+                        className="help-order-select"
+                    >
+                        <option value="">{tHelp('contact_context.order_selector_hint')}</option>
+                        {orders.map((o) => (
+                            <option key={o.id} value={o.id}>
+                                #{o.orderNumber} — {o.status} — {new Date(o.createdAt).toLocaleDateString()}
+                            </option>
+                        ))}
+                    </select>
+                    <div className="text-white/60 text-xs mt-1 ml-2">{tHelp('contact_context.order_selector_hint')}</div>
+                </div>
+            )}
+
+            {showHelpContext && !isAuthenticated && (
+                <div className="input-box mb-5 md:mb-6">
+                    <label htmlFor="help_order_generic">{tHelp('contact_context.order_generic_label')}</label>
+                    <input
+                        id="help_order_generic"
+                        name="help_order_generic"
+                        type="text"
+                        placeholder={tHelp('contact_context.order_generic_placeholder')}
+                        value={genericOrderId}
+                        onChange={(e) => setGenericOrderId(e.target.value)}
+                        className="w-full"
+                    />
+                    <div className="text-white/60 text-xs mt-1 ml-2">{tHelp('contact_context.order_generic_hint')}</div>
+                </div>
+            )}
 
             <div className="input-box mb-5 md:mb-6">
                 <label htmlFor="nombre">{t('form.labels.name')}</label>
@@ -111,7 +221,7 @@ const ContactForm = ({ onSuccess }: ContactFormProps) => {
                     id="mensaje"
                     name="mensaje"
                     rows={6}
-                    placeholder={t('form.placeholders.message')}
+                    placeholder={messagePlaceholder}
                     value={formData.mensaje}
                     onChange={handleInputChange}
                     className={`w-full ${

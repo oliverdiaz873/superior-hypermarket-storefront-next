@@ -70,11 +70,18 @@ src/app/
 |-- [locale]/
 |   |-- (shop)/
 |   |   |-- _components/
+|   |   |-- account/          # protected, includes Help CTA
+|   |   |-- addresses/        # protected
 |   |   |-- cart/
 |   |   |-- category/
-|   |   |-- contact/
+|   |   |-- checkout/         # protected
+|   |   |-- contact/          # public, contextual ?category&topic&orderId
+|   |   |-- help/             # public Help Center
+|   |   |   |-- [category]/
+|   |   |   |   `-- [topic]/
 |   |   |-- legal/
 |   |   |-- offers/
+|   |   |-- orders/           # protected
 |   |   |-- product/
 |   |   |-- search/
 |   |   |-- layout.tsx
@@ -84,7 +91,7 @@ src/app/
 |-- favicon.ico
 |-- globals.css
 |-- robots.ts
-`-- sitemap.ts
+`-- sitemap.ts                # generates Help routes from HELP_CATEGORIES
 ```
 
 Responsibilities:
@@ -99,7 +106,12 @@ Implemented route areas:
 - Home.
 - Cart.
 - Category detail.
-- Contact.
+- Contact (public, with Help context).
+- Help Center (`/help`, `/help/[category]`, `/help/[category]/[topic]` — public, see `docs/features/help.md`).
+- Account (`/account` protected, includes `Centro de ayuda` CTA).
+- Addresses (`/addresses` protected).
+- Checkout (`/checkout` protected).
+- Orders (`/orders`, `/orders/[id]` protected).
 - Legal privacy and terms.
 - Offers.
 - Product detail.
@@ -109,26 +121,34 @@ Implemented route areas:
 
 ```text
 src/features/
-|-- cart/
-|-- contact/
+|-- addresses/   # protected CRUD
+|-- auth/        # session, login/register, AccountMenu
+|-- cart/        # hybrid localStorage + server
+|-- contact/     # form + contextual Help
+|-- help/        # Help Center content + HelpLayout
 |-- home/
-|-- layout/
+|-- layout/      # Header, Footer (Help 2, Cuenta 3), LegalLayout
 |-- legal/
-|-- navigation/
+|-- navigation/  # Desktop/Mobile/Tablet
 |-- offers/
+|-- orders/      # checkout + history
 |-- products/
 `-- search/
 ```
 
 Each feature has a matching document under `docs/features/`.
 
-- `cart/`: Cart context, persistence, cart page UI, add-to-cart controls, quantity controls, and summary.
-- `contact/`: Contact page client UI, form component, and validation hook.
+- `addresses/`: Protected CRUD for shipping addresses.
+- `auth/`: Session `hypermarket_auth`, login/register, `AccountMenu`, guards.
+- `cart/`: Hybrid context (localStorage `carrito` + server), merge, queue, cart page.
+- `contact/`: Contact page client UI, form with Help context (`category/topic/orderId` chips), and validation hook.
+- `help/`: Help Center static content (`help.content.ts` 7 cat/21 topics), `HelpLayout`, `ResolutionBlock`.
 - `home/`: Hero carousel, category banners, about section, and home animations.
-- `layout/`: Shared header, footer, and legal layout shell.
+- `layout/`: Shared header (no Help in nav), footer (`Help: Centro de ayuda/Contacto`, `Cuenta: Mi cuenta/Mis pedidos/Mis direcciones`), and legal layout shell.
 - `legal/`: Legal page client renderer for terms and privacy content.
 - `navigation/`: Desktop, tablet, and mobile navigation components.
 - `offers/`: Offers page UI, filters, offer badges, empty state, and filtering hook.
+- `orders/`: Checkout idempotent, order history and detail with pay/cancel.
 - `products/`: Product cards, grids, carousels, detail section, and product translation hook.
 - `search/`: Header search variants, search page client, empty search state, and shared search hook.
 

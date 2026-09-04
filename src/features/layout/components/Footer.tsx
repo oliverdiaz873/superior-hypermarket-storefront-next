@@ -10,9 +10,40 @@ export default async function Footer() {
     return (
         <footer className="footer-global">
             <div className="footer-content">
-                <small>
-                    &copy; {currentYear} {t('company_name')}. {t('rights_reserved')}
-                </small>
+                <div className="footer-grid">
+                    <div className="footer-section">
+                        <h4 className="footer-section-title">{t('sections.help')}</h4>
+                        <Link href="/help" title={t('links.help_center')}>
+                            {t('links.help_center')}
+                        </Link>
+                        <Link href="/contact" title={t('links.contact')}>
+                            {t('links.contact')}
+                        </Link>
+                    </div>
+
+                    <div className="footer-section">
+                        <h4 className="footer-section-title">{t('sections.account')}</h4>
+                        <Link href="/account" title={t('links.account')}>
+                            {t('links.account')}
+                        </Link>
+                        <Link href="/orders" title={t('links.orders')}>
+                            {t('links.orders')}
+                        </Link>
+                        <Link href="/addresses" title={t('links.addresses')}>
+                            {t('links.addresses')}
+                        </Link>
+                    </div>
+
+                    <div className="footer-section">
+                        <h4 className="footer-section-title">{t('sections.legal')}</h4>
+                        <Link href="/legal/privacy" title={t('links.privacy')}>
+                            {t('links.privacy')}
+                        </Link>
+                        <Link href="/legal/terms" title={t('links.terms')}>
+                            {t('links.terms')}
+                        </Link>
+                    </div>
+                </div>
 
                 <div className="social-icons">
                     <a
@@ -47,15 +78,9 @@ export default async function Footer() {
                     </a>
                 </div>
 
-                <div className="footer-links">
-                    <Link href="/legal/privacy" title={t('links.privacy')}>
-                        {t('links.privacy')}
-                    </Link>
-                    <span className="separator">|</span>
-                    <Link href="/legal/terms" title={t('links.terms')}>
-                        {t('links.terms')}
-                    </Link>
-                </div>
+                <small>
+                    &copy; {currentYear} {t('company_name')}. {t('rights_reserved')}
+                </small>
             </div>
         </footer>
     )

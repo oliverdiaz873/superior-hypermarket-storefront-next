@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import ProductPageClient from '../../_components/ProductPageClient';
-import { getProduct, getProducts, mapApiProductToProduct, mapApiProductsToProducts, fetchOffers, fetchCategories, type ApiLang, type OfferProduct } from '@/lib/api-client';
+import { getProduct, getProducts, mapApiProductToProduct, mapApiProductsToProducts, fetchOffers, fetchCategories, type ApiLang, type OfferProduct, ApiRequestError } from '@/lib/api-client';
 import type { Product } from '@/types/product';
 import type { Category } from '@/types/category';
 
@@ -61,13 +61,16 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
             },
         };
     } catch (error) {
+        if (error instanceof ApiRequestError && error.status === 404) {
+            const t = await getTranslations('common.product');
+            return {
+                title: t('not_found'),
+                description: t('not_found_description'),
+                robots: { index: false, follow: false },
+            };
+        }
         console.error('[ProductDetail] metadata pipeline failed', { id, error });
-        const t = await getTranslations('common.product');
-        return {
-            title: t('not_found'),
-            description: t('not_found_description'),
-            robots: { index: false, follow: false },
-        };
+        throw error;
     }
 }
 
@@ -93,8 +96,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         const response = await getProduct(id, locale);
         product = response.data;
     } catch (error) {
+        if (error instanceof ApiRequestError && error.status === 404) {
+            notFound();
+        }
         console.error('[ProductDetail] getProduct failed', { id, locale, error });
-        notFound();
+        throw error;
     }
 
     if (!product) {
@@ -112,7 +118,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         const productOffer = offerMap.get(mappedProduct.id);
         if (productOffer) {
-            mappedProduct = { ...mappedProduct, oldPrice: productOffer.oldPrice, discountPercentage: productOffer.discountPercentage };
+            mappedProduct = {
+                ...mappedProduct,
+                precio: productOffer.precio,
+                precioTexto: productOffer.precioTexto,
+                oldPrice: productOffer.oldPrice,
+                discountPercentage: productOffer.discountPercentage,
+            };
         }
 
         // F5.3: categorías reales para el breadcrumb (buscar la subcategoría que corresponde al producto)
@@ -126,7 +138,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
             .map((item) => {
                 const offer = offerMap.get(item.id);
                 return offer
-                    ? { ...item, oldPrice: offer.oldPrice, discountPercentage: offer.discountPercentage }
+                    ? {
+                          ...item,
+                          precio: offer.precio,
+                          precioTexto: offer.precioTexto,
+                          oldPrice: offer.oldPrice,
+                          discountPercentage: offer.discountPercentage,
+                      }
                     : item;
             });
 

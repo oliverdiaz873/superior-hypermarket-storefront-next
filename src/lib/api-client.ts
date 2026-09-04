@@ -167,10 +167,7 @@ export function mapApiProductToProduct(api: ApiProduct): Product {
   const unit = api.unit ?? ''
   const quantity = api.unitQuantity
 
-  const hasUnitBlock = Boolean(unit || (quantity != null && quantity > 1))
-  const precioTexto = hasUnitBlock
-    ? `Precio: $${api.price.toLocaleString('en-US')} / ${quantity ?? 1} ${unit}`.trim()
-    : `Precio: $${api.price.toLocaleString('en-US')}`
+  const precioTexto = `Precio: $${api.price.toLocaleString('en-US')}`
 
   return {
     id: api.id,
@@ -221,10 +218,7 @@ export function mapApiOfferToOfferProduct(api: ApiOffer): OfferProduct {
   const unit = api.unit ?? ''
   const quantity = api.unitQuantity
 
-  const hasUnitBlock = Boolean(unit || (quantity != null && quantity > 1))
-  const precioTexto = hasUnitBlock
-    ? `Precio: $${api.discountPrice.toLocaleString('en-US')} / ${quantity ?? 1} ${unit}`.trim()
-    : `Precio: $${api.discountPrice.toLocaleString('en-US')}`
+  const precioTexto = `Precio: $${api.discountPrice.toLocaleString('en-US')}`
 
   return {
     id: api.id,
@@ -275,7 +269,11 @@ export function mapApiCategoriesToCategories(apiCategories: ApiCategory[]): Cate
 // Client HTTP (fetch nativo; sirve tanto en Server Components como en el cliente)
 // ─────────────────────────────────────────────────────────────────────────────
 
-async function apiRequest<T>(path: string, params?: object): Promise<T> {
+export async function apiRequest<T>(
+  path: string,
+  params?: object,
+  init?: RequestInit & { next?: { revalidate?: number | false; tags?: string[] } }
+): Promise<T> {
   const url = new URL(`${API_BASE_URL}${path}`)
   if (params) {
     for (const [key, value] of Object.entries(params)) {
@@ -285,14 +283,28 @@ async function apiRequest<T>(path: string, params?: object): Promise<T> {
     }
   }
 
-  const res = await fetch(url, {
-    headers: { Accept: 'application/json' },
-    cache: 'no-store',
-  })
+  const fetchInit: RequestInit & { next?: { revalidate?: number | false; tags?: string[] } } = {
+    ...(init?.next ? { next: init.next } : { cache: 'no-store' as const }),
+    ...init,
+    headers: { Accept: 'application/json', ...(init?.headers as Record<string, string> | undefined) },
+  }
+  // Si se pasó next, aseguramos que no se envíe cache:'no-store' simultáneo
+  if (init?.next && 'cache' in fetchInit) {
+    // next.revalidate ya define la estrategia; eliminar cache para evitar conflicto
+    delete (fetchInit as { cache?: string }).cache
+  }
 
+  const res = await fetch(url, fetchInit)
 
   if (!res.ok) {
-    throw new Error(`API ${res.status}: ${res.url}`)
+    let message = ''
+    try {
+      const body = (await res.json()) as { message?: string } | null
+      message = body?.message ?? ''
+    } catch {
+      /* cuerpo no-JSON: se usa el mensaje por defecto */
+    }
+    throw new ApiRequestError(res.status, message)
   }
 
   return (await res.json()) as T
@@ -312,15 +324,29 @@ export function getProducts(query: ApiPaginationParams = {}): Promise<ApiCollect
     sortBy: query.sortBy,
     sortOrder: query.sortOrder,
   }
-  return apiRequest<ApiCollection<ApiProduct>>('/products', params)
+  // Búsqueda por texto (q) es dinámica y no debe cachearse; resto sí puede reutilizar Data Cache
+  const isSearchQuery = typeof params.q === 'string' && params.q.trim().length > 0
+  if (isSearchQuery) {
+    return apiRequest<ApiCollection<ApiProduct>>('/products', params)
+  }
+  const tags = ['products']
+  if (params.category) tags.push(`products:category:${params.category}`)
+  if (params.featured) tags.push('products:featured')
+  return apiRequest<ApiCollection<ApiProduct>>('/products', params, {
+    next: { revalidate: 60, tags },
+  })
 }
 
 export function getProduct(id: string, lang?: ApiLang): Promise<ApiEnvelope<ApiProduct>> {
-  return apiRequest<ApiEnvelope<ApiProduct>>(`/products/${encodeURIComponent(id)}`, { lang })
+  return apiRequest<ApiEnvelope<ApiProduct>>(`/products/${encodeURIComponent(id)}`, { lang }, {
+    next: { revalidate: 60, tags: ['products', `product:${id}`, `product:${id}:${lang ?? 'all'}`] },
+  })
 }
 
 export function getOffers(lang?: ApiLang): Promise<ApiEnvelope<ApiOffer[]>> {
-  return apiRequest<ApiEnvelope<ApiOffer[]>>('/offers', { lang })
+  return apiRequest<ApiEnvelope<ApiOffer[]>>('/offers', { lang }, {
+    next: { revalidate: 60, tags: ['offers', `offers:${lang ?? 'all'}`] },
+  })
 }
 
 /**
@@ -364,7 +390,9 @@ export function search(
 }
 
 export function getCategories(): Promise<ApiEnvelope<ApiCategory[]>> {
-  return apiRequest<ApiEnvelope<ApiCategory[]>>('/categories')
+  return apiRequest<ApiEnvelope<ApiCategory[]>>('/categories', undefined, {
+    next: { revalidate: 300, tags: ['categories'] },
+  })
 }
 
 /**
@@ -402,6 +430,8 @@ export async function sendContactMessage(payload: ApiContactPayload): Promise<Ap
  * Nunca lanza: si el backend no responde devuelve una lista vacía para que la
  * UI degrade a "sin navegación de categorías" en vez de romper el SSR.
  * El error se loggea para observabilidad SSR (no se silencia).
+ * Data Cache (revalidate 300s, tag categories) + fetch memoization
+ * deduplican layout + generateMetadata + page a 1 request.
  */
 export async function fetchCategories(): Promise<Category[]> {
   try {

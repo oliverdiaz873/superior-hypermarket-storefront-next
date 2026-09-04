@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     description: "Tu hipermercado de confianza con la mejor selección de alimentos, tecnología, electrodomésticos y más.",
     images: [
       {
-        url: "/assets/images/logo/logo-with-background.jpeg",
+        url: "/assets/images/logo/logo.png",
         width: 1200,
         height: 630,
         alt: "Hipermercado Superior",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Hipermercado Superior | Calidad y Variedad",
     description: "Tu hipermercado de confianza con la mejor selección de alimentos, tecnología, electrodomésticos y más.",
-    images: ["/assets/images/logo/logo-with-background.jpeg"],
+    images: ["/assets/images/logo/logo.png"],
   },
   icons: {
     icon: [

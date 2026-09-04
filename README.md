@@ -67,6 +67,7 @@ Core documentation:
 
 - [Architecture](docs/architecture.md)
 - [Folder Structure](docs/folder-structure.md)
+- [Help Center](docs/features/help.md)
 - [Cart](docs/features/cart.md)
 - [Products](docs/features/products.md)
 - [Offers](docs/features/offers.md)
@@ -93,8 +94,10 @@ This application consumes the centralized REST API provided by
 - Category pages built from local category and product data.
 - Offers page with category filtering and discount badges.
 - Client-side search from header variants and search results page.
-- Client-side cart using React Context and `localStorage`.
-- Contact form with client-side validation and simulated submission.
+- Hybrid cart (anonymous localStorage + authenticated server) with merge.
+- Contact form with contextual Help (`category/topic/orderId` chips, order selector, `orderNumber` visible).
+- Public Help Center (`/help`, 7 categories, 21 topics) with SEO sitemap integration.
+- Account page with `Centro de ayuda` access to Help Center.
 - Legal terms and privacy pages from translation content.
 - Responsive desktop, tablet, and mobile navigation.
 

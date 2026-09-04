@@ -1,7 +1,7 @@
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Product } from '@/types/product'
 import { ProductPageData } from '@/services/catalog/productPageData'
-import { formatProductPrice, unitLabel } from '@/lib/priceUtils'
+import { formatProductPrice, formatUnitLabel } from '@/lib/priceUtils'
 
 /**
  * useProductTranslation - Hook para gestionar la internacionalizacion de productos.
@@ -15,6 +15,7 @@ import { formatProductPrice, unitLabel } from '@/lib/priceUtils'
 export const useProductTranslation = (product?: Product, pageData?: ProductPageData) => {
     const tProducts = useTranslations('products');
     const tCommon = useTranslations('common');
+    const locale = useLocale() as 'es' | 'en';
     const productId = product?.id
     const fallbackName = product?.name ?? tCommon('product.not_found')
 
@@ -39,11 +40,8 @@ export const useProductTranslation = (product?: Product, pageData?: ProductPageD
         ? (tProducts.raw(specsKey as any) as string[])
         : (pageData?.detalles ?? [])
 
-    const rawUnit = product ? unitLabel(product) : 'unidad'
-    const unitKey = `units.${rawUnit}`;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const translatedUnit = tCommon.has(unitKey as any) ? tCommon(unitKey as any) : rawUnit
-    const displayUnit = product?.quantity && product.quantity > 1 ? `${product.quantity} ${translatedUnit}` : translatedUnit
+    // Usar formatUnitLabel centralizado en place de lógica inline
+    const displayUnit = product ? formatUnitLabel(product, locale) : ''
 
     return {
         name: finalName,
@@ -52,7 +50,7 @@ export const useProductTranslation = (product?: Product, pageData?: ProductPageD
         priceText: product
             ? formatProductPrice(product, {
                 pricePrefix: tCommon('product.price_prefix'),
-                translatedUnit,
+                locale,
             })
             : '',
         labels: {
