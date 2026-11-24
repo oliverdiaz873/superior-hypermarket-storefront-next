@@ -11,46 +11,45 @@ interface UseOfferFiltersReturn {
 }
 
 /**
+ * Filtra ofertas por categoría. `OfferProduct.categoria` es el slug de la
+ * categoría raíz (`ApiOffer.categoryId`); la selección de la UI también es
+ * el slug raíz (`Category.id`), por lo que la comparación es directa.
+ */
+export const filterOffersByCategory = (offers: OfferProduct[], selectedCategory: string): OfferProduct[] => {
+    if (selectedCategory === 'all') return offers
+    return offers.filter((p) => p.categoria === selectedCategory)
+}
+
+/** Ordena por porcentaje de descuento (mayor a menor). */
+export const sortOffersByDiscount = (offers: OfferProduct[]): OfferProduct[] =>
+    [...offers].sort((a, b) => (b.discountPercentage ?? 0) - (a.discountPercentage ?? 0))
+
+/**
  * Hook para gestionar la lógica de filtrado y ordenamiento de ofertas.
  * F5.4: la fuente es la oferta real del backend (`OfferProduct[]` desde
  * /offers), nunca un catálogo mock. Encapsula:
- * - Filtrado por categoría (manejando la conversión de subcategorías)
+ * - Filtrado por categoría raíz (el contrato /offers expone `categoryId` raíz)
  * - Ordenamiento por descuento (mayor a menor)
  *
  * @returns Objeto con productos filtrados, estado de categoría seleccionada y callbacks
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- `categories` se conserva en la firma por compatibilidad con los callers
 export const useOfferFilters = (offers: OfferProduct[], categories: Category[]): UseOfferFiltersReturn => {
     const [selectedCategory, setSelectedCategory] = useState<string>('all')
-
-    // Mapeo estable de categorías a subcategorías para evitar re-cálculos innecesarios
-    const categoryMap = useMemo(() => {
-        const map = new Map<string, string[]>()
-        categories.forEach(cat => {
-            const subIds = cat.subcategories.map(sub => {
-                return sub.href.split('#')[1] || sub.href.split('/').filter(Boolean).pop() || ''
-            })
-            map.set(cat.id, subIds)
-        })
-        return map
-    }, [categories])
 
     const offerProducts = offers
 
     // Lógica de filtrado reactiva
-    const filteredProducts: OfferProduct[] = useMemo(() => {
-        if (selectedCategory === 'all') return offerProducts
-
-        const allowedSubcategories = categoryMap.get(selectedCategory) || []
-
-        return offerProducts.filter((p) =>
-            allowedSubcategories.includes(p.categoria)
-        )
-    }, [offerProducts, selectedCategory, categoryMap])
+    const filteredProducts: OfferProduct[] = useMemo(
+        () => filterOffersByCategory(offerProducts, selectedCategory),
+        [offerProducts, selectedCategory]
+    )
 
     // Ordenamiento final por porcentaje de descuento
-    const sortedProducts: OfferProduct[] = useMemo(() => {
-        return [...filteredProducts].sort((a, b) => (b.discountPercentage ?? 0) - (a.discountPercentage ?? 0))
-    }, [filteredProducts])
+    const sortedProducts: OfferProduct[] = useMemo(
+        () => sortOffersByDiscount(filteredProducts),
+        [filteredProducts]
+    )
 
     return {
         offerProducts,
