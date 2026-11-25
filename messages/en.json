@@ -19,7 +19,13 @@
       "sign_up": "Register",
       "my_account": "My account",
       "logout": "Sign out",
-      "help": "Help"
+      "help": "Help",
+      "greeting": "Welcome",
+      "greeting_named": "Hello, {name}",
+      "welcome_title": "Welcome to Superior Hypermarket!",
+      "welcome_description": "Sign in to enjoy a personalized shopping experience.",
+      "create_account": "Create an account",
+      "open_account": "Open account menu"
     },
     "login": {
       "title": "Sign in",

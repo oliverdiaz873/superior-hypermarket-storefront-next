@@ -19,7 +19,13 @@
       "sign_up": "Registrarse",
       "my_account": "Mi cuenta",
       "logout": "Cerrar sesión",
-      "help": "Ayuda"
+      "help": "Ayuda",
+      "greeting": "Hola, bienvenido",
+      "greeting_named": "Hola, {name}",
+      "welcome_title": "¡Bienvenido a Hipermercado Superior!",
+      "welcome_description": "Inicia sesión para disfrutar de una experiencia de compra personalizada.",
+      "create_account": "Crear una cuenta",
+      "open_account": "Abrir menú de cuenta"
     },
     "login": {
       "title": "Iniciar sesión",
